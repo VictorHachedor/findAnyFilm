@@ -27,89 +27,107 @@ class _TestSliderState extends State<TestSlider>
 
   final images = [
     Image.asset('assets/slider_images/crown.jpg',
-        fit: BoxFit.fitHeight, key: const Key('1')),
+        fit: BoxFit.none, 
+        height: 450,
+        scale: 3,
+        key: const Key('1')),
     Image.asset('assets/slider_images/last_duel.jpg',
-        fit: BoxFit.fitHeight, key: const Key('2')),
+        fit: BoxFit.none, 
+        height: 450,
+        scale: 5.8, 
+        key: const Key('2')),
     Image.asset('assets/slider_images/saints.jpg',
-        fit: BoxFit.fitHeight, key: const Key('3')),
+        fit: BoxFit.none, 
+        height: 450,
+        scale: 3,
+        key: const Key('3')),
     Image.asset('assets/slider_images/spider_man.jpg',
-        fit: BoxFit.fitHeight, key: const Key('4')),
+        fit: BoxFit.none, 
+        height: 450,
+        scale: 3, 
+        key: const Key('4')),
     Image.asset('assets/slider_images/bond.jpg',
-        fit: BoxFit.fitHeight, key: const Key('5')),
+        fit: BoxFit.none, 
+        height: 450,
+        scale: 3, 
+        key: const Key('5')),
   ];
 
   final buttons = [
     TextButton(
-       key: Key('1'),
+        key: Key('1'),
         style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                        )),
-          fixedSize: MaterialStateProperty.all<Size>(
-                          const Size(150.0, 40.0),
-                        ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
+            )),
+            fixedSize: MaterialStateProperty.all<Size>(
+              const Size(150.0, 40.0),
+            ),
             backgroundColor: MaterialStateProperty.all<Color>(
                 const Color.fromRGBO(120, 240, 120, 1.0))),
         onPressed: () {},
         child: const Text('In cinemas',
             style: TextStyle(color: Colors.black, fontSize: 17.0))),
     TextButton(
-      key: Key('2'),
+        key: Key('2'),
         style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                        )),
-          fixedSize: MaterialStateProperty.all<Size>(
-                          const Size(150.0, 40.0),
-                        ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
+            )),
+            fixedSize: MaterialStateProperty.all<Size>(
+              const Size(150.0, 40.0),
+            ),
             backgroundColor: MaterialStateProperty.all<Color>(
                 const Color.fromRGBO(120, 240, 120, 1.0))),
         onPressed: () {},
         child: const Text('Watch now',
-            style: TextStyle(color: Colors.black, fontSize: 17.0,))),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 17.0,
+            ))),
     TextButton(
-      key: Key('3'),
+        key: Key('3'),
         style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                        )),
-          fixedSize: MaterialStateProperty.all<Size>(
-                          const Size(150.0, 40.0),
-                        ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
+            )),
+            fixedSize: MaterialStateProperty.all<Size>(
+              const Size(150.0, 40.0),
+            ),
             backgroundColor: MaterialStateProperty.all<Color>(
                 const Color.fromRGBO(120, 240, 120, 1.0))),
         onPressed: () {},
         child: const Text('Coming soon',
             style: TextStyle(color: Colors.black, fontSize: 17.0))),
     TextButton(
-      key: Key('4'),
+        key: Key('4'),
         style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                        )),
-          fixedSize: MaterialStateProperty.all<Size>(
-                          const Size(150.0, 40.0),
-                        ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
+            )),
+            fixedSize: MaterialStateProperty.all<Size>(
+              const Size(150.0, 40.0),
+            ),
             backgroundColor: MaterialStateProperty.all<Color>(
                 const Color.fromRGBO(120, 240, 120, 1.0))),
         onPressed: () {},
         child: const Text('Buy to own',
             style: TextStyle(color: Colors.black, fontSize: 17.0))),
     TextButton(
-      key: Key('5'),
+        key: Key('5'),
         style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                        )),
-          fixedSize: MaterialStateProperty.all<Size>(
-                          const Size(150.0, 40.0),
-                        ),
-          backgroundColor: MaterialStateProperty.all<Color>(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25.0),
+            )),
+            fixedSize: MaterialStateProperty.all<Size>(
+              const Size(150.0, 40.0),
+            ),
+            backgroundColor: MaterialStateProperty.all<Color>(
                 const Color.fromRGBO(120, 240, 120, 1.0))),
         onPressed: () {},
         child: const Text('Watch now',
@@ -136,7 +154,7 @@ class _TestSliderState extends State<TestSlider>
     super.didUpdateWidget(oldWidget);
     if (buttonNumber == 1) {
       _controller.duration = const Duration(seconds: 40);
-      _controller.value = 0.060;
+      _controller.value = 0.030;
       _controller.repeat();
     } else if (buttonNumber == 2) {
       _controller.duration = const Duration(seconds: 40);
@@ -144,11 +162,11 @@ class _TestSliderState extends State<TestSlider>
       _controller.repeat();
     } else if (buttonNumber == 3) {
       _controller.duration = const Duration(seconds: 40);
-      _controller.value = 0.43;
+      _controller.value = 0.44;
       _controller.repeat();
     } else if (buttonNumber == 4) {
       _controller.duration = const Duration(seconds: 40);
-      _controller.value = 0.60;
+      _controller.value = 0.63;
       _controller.repeat();
     } else if (buttonNumber == 5) {
       _controller.duration = const Duration(seconds: 40);
@@ -165,31 +183,37 @@ class _TestSliderState extends State<TestSlider>
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SizedBox(
-        width: 850,
-        height: 285,
+        width: width,
+        height: 600,
         child: Stack(
           children: <Widget>[
             SizedBox(
-              width: 850,
+              width: width,
               height: 285,
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 2000),
                 child: buildImagesIndex(),
               ),
             ),
-            Column(children: [
-              const SizedBox(
-                height: 180,
+            Column(
+              children: [
+              const SizedBox(               
+                height: 200,
               ),
               AnimatedSwitcher(
                 duration: const Duration(milliseconds: 2000),
                 child: buildButtonsIndex(),
               ),
+              
+              Padding(
+                padding: const EdgeInsets.only(left: 30, right: 30),
+                child:
               SizedBox(
-                  width: 320,
-                  height: 20,
+                  width: width,
+                  height: 30,
                   child: Stack(children: <Widget>[
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -214,15 +238,15 @@ class _TestSliderState extends State<TestSlider>
                             buildGreenButton(5),
                           ]),
                     ),
-                  ])),
-              const SizedBox(
+                  ]))),
+             /* const SizedBox(
                 height: 2,
               ),
               Container(
                 color: Colors.white,
                 height: 30,
                 width: 450,
-              )
+              )*/
             ])
           ],
         ),
@@ -270,8 +294,8 @@ class _TestSliderState extends State<TestSlider>
   Widget buildImagesIndex() {
     if (_controller.value > 0.060) {
       if (_controller.value > 0.25) {
-        if (_controller.value > 0.43) {
-          if (_controller.value > 0.60) {
+        if (_controller.value > 0.44) {
+          if (_controller.value > 0.63) {
             if (_controller.value > 0.82) {
               return images[4];
             }
@@ -290,8 +314,8 @@ class _TestSliderState extends State<TestSlider>
   Widget buildButtonsIndex() {
     if (_controller.value > 0.060) {
       if (_controller.value > 0.25) {
-        if (_controller.value > 0.43) {
-          if (_controller.value > 0.60) {
+        if (_controller.value > 0.44) {
+          if (_controller.value > 0.63) {
             if (_controller.value > 0.82) {
               return buttons[4];
             }

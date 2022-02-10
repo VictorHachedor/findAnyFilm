@@ -6,4 +6,8 @@ class FindAnyMoviesPages {
   static String testSliderPath = '/slider'; //temporary path
 
   static String filmListPath = '/search';
+
+  static String newsPath = '/news';
+
+  static String filmDetailsPath = '/filmDetails';
 }

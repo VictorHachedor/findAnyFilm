@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class FindAnyMoviesTab {
-  static const int login = 0;
-  static const int signup = 1;
+  static const int news = 0;
+  static const int films = 1;
+  //TODO add series
 }
 
 class AppStateManager extends ChangeNotifier {
@@ -11,13 +12,15 @@ class AppStateManager extends ChangeNotifier {
   bool _pressedSignup = false;
   bool _pressedLogin = false;
   bool _initialized = false;
-  int _selectedTab = FindAnyMoviesTab.login;
+  int _selectedTab = FindAnyMoviesTab.news;
+  bool _didSelectCard = false;
 
   bool get didPressLogin => _pressedLogin;
   bool get isLoggedIn => _loggedIn;
   bool get didPressSignup => _pressedSignup;
   bool get isInitialized => _initialized;
   int get getSelectedTab => _selectedTab;
+  bool get didSelectCard => _didSelectCard;
 
   void initializeApp() {
     Timer(const Duration(milliseconds: 2000), () {
@@ -41,8 +44,13 @@ class AppStateManager extends ChangeNotifier {
     notifyListeners();
   }
 
-    void goToTab(index) {
+  void goToTab(index) {
     _selectedTab = index;
+    notifyListeners();
+  }
+
+  void tapOnCard(bool selected) {
+    _didSelectCard = selected;
     notifyListeners();
   }
 }

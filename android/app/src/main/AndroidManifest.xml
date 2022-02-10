@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.find_any_movie">
+    
    <application
         android:label="find_any_movie"
         android:icon="@mipmap/ic_launcher">

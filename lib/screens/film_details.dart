@@ -1,11 +1,25 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import '../models/models.dart';
 
+class FilmDetails extends StatefulWidget {
+  static MaterialPage page() {
+    return MaterialPage(
+      name: FindAnyMoviesPages.filmDetailsPath,
+      key: ValueKey(FindAnyMoviesPages.filmDetailsPath),
+      child: const FilmDetails(),
+    );
+  }
 
-class FilmDetails extends StatelessWidget {
   const FilmDetails({Key? key}) : super(key: key);
 
+  @override
+  _FilmDetailsState createState() => _FilmDetailsState();
+}
+
+class _FilmDetailsState extends State<FilmDetails> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -35,8 +49,12 @@ class FilmDetails extends StatelessWidget {
                       child: Container(
                         decoration: const BoxDecoration(
                             shape: BoxShape.circle, color: Colors.grey),
-                        child: const BackButton(
+                        child: BackButton(
                           color: Colors.white,
+                          onPressed: () {
+                            Provider.of<AppStateManager>(context, listen: false)
+                                .tapOnCard(false);
+                          },
                         ),
                       ),
                     ),
@@ -50,8 +68,7 @@ class FilmDetails extends StatelessWidget {
                   child: Text(
                     // TODO 2
                     'Chicken Vesuvio',
-                    style: TextStyle(
-                        fontSize: 22, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(
@@ -75,7 +92,7 @@ class FilmDetails extends StatelessWidget {
                     ),
                     onPressed: () {
                       // TODO 4
-                      Navigator.pop(context);
+                      
                     },
                     icon: SvgPicture.asset(
                       'assets/images/icon_bookmark.svg',

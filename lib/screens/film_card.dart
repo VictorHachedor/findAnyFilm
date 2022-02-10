@@ -31,7 +31,6 @@ Widget filmCard(APIResults result) {
           ),
             width: 150,
             )
-         
         ),
       ],
     ),

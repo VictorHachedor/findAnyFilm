@@ -1,6 +1,7 @@
 import 'package:find_any_movie/auth_reg/auth_reg_home.dart';
 import 'package:find_any_movie/models/app_state_manager.dart';
 import 'package:find_any_movie/models/models.dart';
+import 'package:find_any_movie/screens/film_details.dart';
 import 'package:find_any_movie/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import '../screens/screens.dart';
@@ -35,9 +36,12 @@ class AppRouter extends RouterDelegate
       pages: [
         if (!appStateManager.isInitialized) SplashScreen.page(),
         if (appStateManager.isInitialized && !appStateManager.isLoggedIn)
-          TestSlider.page(),
+        FilmList.page(),
+        //MainScreen.page(appStateManager.getSelectedTab),
 
-        if (appStateManager.isLoggedIn) MainScreen.page(),
+        if (appStateManager.didSelectCard) FilmDetails.page(),
+
+        //  if (appStateManager.isLoggedIn) MainScreen.page(),
         // TODO: Add Profile(movie) Screen
         // TODO: Add film card screen
         // TODO: Add collections screen
@@ -57,9 +61,14 @@ class AppRouter extends RouterDelegate
     }
 
     if (route.settings.name == FindAnyMoviesPages.authRegHomePath) {
-      appStateManager.tapOnLogin(false);// wtf is this?
+      appStateManager.tapOnLogin(false); // wtf is this?
     }
     // TODO: Handle state when user closes profile screen
+
+    if (route.settings.name == FindAnyMoviesPages.filmDetailsPath){
+      appStateManager.tapOnCard(false);
+    }
+
     return true;
   }
 

@@ -41,7 +41,7 @@ class _FilmListState extends State<FilmList> {
   bool loading = false;
   bool inErrorState = false;
   int page = 1;
-  bool triger = false;
+  bool trigger = false;
 
   @override
   void initState() {
@@ -52,7 +52,7 @@ class _FilmListState extends State<FilmList> {
           0.99 * _scrollController.position.maxScrollExtent;
 
       if (_scrollController.position.pixels > triggerFetchMoreSize) {
-        if (hasMore && !loading && !inErrorState && triger) {
+        if (!loading && !inErrorState && trigger) {
           setState(() {
             loading = true;
             page += 1;
@@ -132,7 +132,7 @@ class _FilmListState extends State<FilmList> {
       currentCount = 0;
       currentEndPosition = pageCount;
       currentStartPosition = 0;
-      hasMore = true;
+      trigger = true;
       value = value.trim();
       page = 1;
     });
@@ -166,7 +166,7 @@ class _FilmListState extends State<FilmList> {
 
           final query = (result as Success).value;
           inErrorState = false;
-          triger = true;
+          trigger = true;
           currentSearchList.addAll(query.results);
           if (query != null) {
             /*currentCount = query.count;
@@ -220,6 +220,8 @@ class _FilmListState extends State<FilmList> {
     final result = results[index];
     return GestureDetector(
       onTap: () {
+        //TODO add navigator 2.0
+
         Navigator.push(topLevelContext, MaterialPageRoute(
           builder: (context) {
             return const FilmDetails();

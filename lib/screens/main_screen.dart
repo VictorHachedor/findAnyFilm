@@ -36,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
     ) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Find Any Film',
+          title: const Text('Find Any Film',
               style: TextStyle(
                 fontSize: 23,
               )),
@@ -52,18 +52,18 @@ class _MainScreenState extends State<MainScreen> {
           onTap: (index) {
             Provider.of<AppStateManager>(context, listen: false).goToTab(index);
           },
-          items: <BottomNavigationBarItem>[
-            const BottomNavigationBarItem(
+          items: const <BottomNavigationBarItem>[
+             BottomNavigationBarItem(
               icon: Icon(Icons.aod),
               label: 'News',
             ),
-            const BottomNavigationBarItem(
+             BottomNavigationBarItem(
               icon: Icon(Icons.movie),
               label: 'Films',
             ),
-            const BottomNavigationBarItem(
+             BottomNavigationBarItem(
               icon: Icon(Icons.circle),
-              label: 'Series',
+              label: 'Watchlist',
             ),
           ],
         ),

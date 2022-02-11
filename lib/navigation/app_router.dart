@@ -37,7 +37,7 @@ class AppRouter extends RouterDelegate
         if (!appStateManager.isInitialized) SplashScreen.page(),
         if (appStateManager.isInitialized && !appStateManager.isLoggedIn)
         FilmList.page(),
-        //MainScreen.page(appStateManager.getSelectedTab),
+       // MainScreen.page(appStateManager.getSelectedTab),
 
         if (appStateManager.didSelectCard) FilmDetails.page(),
 

@@ -77,7 +77,9 @@ class _FilmListState extends State<FilmList> {
         child: Column(
           children: <Widget>[
             _buildSearchCard(),
-            _buildFilmLoader(context),
+            _buildFilmLoader(
+              context,
+            ),
           ],
         ),
       ),
@@ -129,9 +131,6 @@ class _FilmListState extends State<FilmList> {
   void startSearch(String value) {
     setState(() {
       currentSearchList.clear();
-      currentCount = 0;
-      currentEndPosition = pageCount;
-      currentStartPosition = 0;
       trigger = true;
       value = value.trim();
       page = 1;
@@ -146,7 +145,6 @@ class _FilmListState extends State<FilmList> {
       future: FilmService.create().queryFilms(
         searchTextController.text.trim(),
         page,
-        /*currentStartPosition, currentEndPosition - might be helpful for "show more"*/
       ),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
@@ -159,7 +157,6 @@ class _FilmListState extends State<FilmList> {
           loading = false;
           final result = snapshot.data?.body;
           if (result is Error) {
-            //Hit an error
             inErrorState = true;
             return _buildFilmList(context, currentSearchList);
           }
@@ -167,22 +164,10 @@ class _FilmListState extends State<FilmList> {
           final query = (result as Success).value;
           inErrorState = false;
           trigger = true;
-          currentSearchList.addAll(query.results);
-          if (query != null) {
-            /*currentCount = query.count;
-          hasMore = query.more;*/
-
-            //  _buildFilmLoader(context);
-            /* if(query.to < currentEndPosition){ 
-            currentEndPosition = query.to;
-          } - what's a equivalent in my project do I need it? perhaps the eqivalent is  "page" TODO?
-            }*/
-
-          }
+          currentSearchList.addAll(query.results);       
           return _buildFilmList(context, currentSearchList);
         } else {
-          if (currentCount == 0) {
-            // Show a loading indicator while waiting for the recipes
+          if ( currentSearchList.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           } else {
             return _buildFilmList(context, currentSearchList);
@@ -207,8 +192,7 @@ class _FilmListState extends State<FilmList> {
           childAspectRatio: (itemWidth / itemHeight),
         ),
         itemCount: results.length,
-        itemBuilder: (BuildContext context, int index) {
-          //  showMoreFilms(index, results, filmListContext);
+        itemBuilder: (BuildContext context, int index) {        
           return _buildFilmCard(filmListContext, results, index);
         },
       ),
@@ -231,10 +215,4 @@ class _FilmListState extends State<FilmList> {
       child: filmCard(result),
     );
   }
-
-  /*void showMoreFilms(
-      int index, List<APIResults> results, BuildContext filmListContext) {
-    if (index < results.length - 1) return;
-    _buildFilmLoader(context);
-  }*/
 }

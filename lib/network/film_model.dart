@@ -7,6 +7,7 @@ part 'film_model.g.dart';
 class APIFilmQuery {
   factory APIFilmQuery.fromJson(Map<String, dynamic> json) =>
       _$APIFilmQueryFromJson(json);
+
   Map<String, dynamic> toJson() => _$APIFilmQueryToJson(this);
 
   List<APIResults> results;
@@ -32,5 +33,6 @@ class APIResults {
 
   factory APIResults.fromJson(Map<String, dynamic> json) =>
       _$APIResultsFromJson(json);
+      
   Map<String, dynamic> toJson() => _$APIResultsToJson(this);
 }

@@ -49,8 +49,6 @@ flutter:
     - assets/slider_images/saints.jpg
     - assets/slider_images/bond.jpg
     - assets/slider_images/crown.jpg
-    - assets/recipes1.json
-    - assets/recipes2.json
     - assets/slider_images/blank.png
     - assets/images/
 

@@ -14,25 +14,29 @@ Widget filmCard(APIResults result) {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         ClipRRect(
-            borderRadius: const BorderRadius.only(topLeft: Radius.circular(6.0), topRight: Radius.circular(6.0),),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(6.0),
+              topRight: Radius.circular(6.0),
+            ),
             child: CachedNetworkImage(
-                imageUrl: imageBaseUrl +(result.posterPath ?? '/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg') ,
+                imageUrl: imageBaseUrl +
+                    (result.posterPath ?? '/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg'),
                 //(imageBaseUrl + result.posterPath) ?? '/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg') - try
                 height: 258,
                 width: 200,
                 fit: BoxFit.fill)),
         Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Container(
-            child:  Text(
-            result.title ?? 'blank',
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          ),
-            width: 150,
-            )
-        ),
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Container(
+              child: Text(
+                result.title ?? 'blank',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+              width: 150,
+            )),
       ],
     ),
   );

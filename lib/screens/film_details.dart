@@ -92,7 +92,6 @@ class _FilmDetailsState extends State<FilmDetails> {
                     ),
                     onPressed: () {
                       // TODO 4
-                      
                     },
                     icon: SvgPicture.asset(
                       'assets/images/icon_bookmark.svg',

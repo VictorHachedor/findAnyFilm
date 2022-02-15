@@ -10,9 +10,9 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-void _setupLogging(){
+void _setupLogging() {
   Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((rec){
+  Logger.root.onRecord.listen((rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
 }

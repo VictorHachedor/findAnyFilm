@@ -27,30 +27,15 @@ class _TestSliderState extends State<TestSlider>
 
   final images = [
     Image.asset('assets/slider_images/crown.jpg',
-        fit: BoxFit.none, 
-        height: 450,
-        scale: 3,
-        key: const Key('1')),
+        fit: BoxFit.none, height: 450, scale: 3, key: const Key('1')),
     Image.asset('assets/slider_images/last_duel.jpg',
-        fit: BoxFit.none, 
-        height: 450,
-        scale: 5.8, 
-        key: const Key('2')),
+        fit: BoxFit.none, height: 450, scale: 5.8, key: const Key('2')),
     Image.asset('assets/slider_images/saints.jpg',
-        fit: BoxFit.none, 
-        height: 450,
-        scale: 3,
-        key: const Key('3')),
+        fit: BoxFit.none, height: 450, scale: 3, key: const Key('3')),
     Image.asset('assets/slider_images/spider_man.jpg',
-        fit: BoxFit.none, 
-        height: 450,
-        scale: 3, 
-        key: const Key('4')),
+        fit: BoxFit.none, height: 450, scale: 3, key: const Key('4')),
     Image.asset('assets/slider_images/bond.jpg',
-        fit: BoxFit.none, 
-        height: 450,
-        scale: 3, 
-        key: const Key('5')),
+        fit: BoxFit.none, height: 450, scale: 3, key: const Key('5')),
   ];
 
   final buttons = [
@@ -198,48 +183,45 @@ class _TestSliderState extends State<TestSlider>
                 child: buildImagesIndex(),
               ),
             ),
-            Column(
-              children: [
-              const SizedBox(               
+            Column(children: [
+              const SizedBox(
                 height: 200,
               ),
               AnimatedSwitcher(
                 duration: const Duration(milliseconds: 2000),
                 child: buildButtonsIndex(),
               ),
-              
               Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30),
-                child:
-              SizedBox(
-                  width: width,
-                  height: 30,
-                  child: Stack(children: <Widget>[
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          buildGreyButton(1),
-                          buildGreyButton(2),
-                          buildGreyButton(3),
-                          buildGreyButton(4),
-                          buildGreyButton(5),
-                        ]),
-                    SizeTransition(
-                      sizeFactor: _animation,
-                      axis: Axis.horizontal,
-                      axisAlignment: -1,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            buildGreenButton(1),
-                            buildGreenButton(2),
-                            buildGreenButton(3),
-                            buildGreenButton(4),
-                            buildGreenButton(5),
-                          ]),
-                    ),
-                  ]))),
-             /* const SizedBox(
+                  padding: const EdgeInsets.only(left: 30, right: 30),
+                  child: SizedBox(
+                      width: width,
+                      height: 30,
+                      child: Stack(children: <Widget>[
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              buildGreyButton(1),
+                              buildGreyButton(2),
+                              buildGreyButton(3),
+                              buildGreyButton(4),
+                              buildGreyButton(5),
+                            ]),
+                        SizeTransition(
+                          sizeFactor: _animation,
+                          axis: Axis.horizontal,
+                          axisAlignment: -1,
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                buildGreenButton(1),
+                                buildGreenButton(2),
+                                buildGreenButton(3),
+                                buildGreenButton(4),
+                                buildGreenButton(5),
+                              ]),
+                        ),
+                      ]))),
+              /* const SizedBox(
                 height: 2,
               ),
               Container(

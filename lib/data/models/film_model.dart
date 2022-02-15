@@ -15,9 +15,17 @@ class FilmModel extends Equatable {
   final String? releaseDate;
   final List<CastModel>? cast;
 
-  const FilmModel(this.id, this.popularity, this.runtime, this.genreIds, 
-  this.genres, this.image, this.label, this.overview, this.releaseDate, 
-  this.cast);
+  const FilmModel(
+      this.id,
+      this.popularity,
+      this.runtime,
+      this.genreIds,
+      this.genres,
+      this.image,
+      this.label,
+      this.overview,
+      this.releaseDate,
+      this.cast);
 
   @override
   List<Object?> get props => [

@@ -33,6 +33,6 @@ class APIResults {
 
   factory APIResults.fromJson(Map<String, dynamic> json) =>
       _$APIResultsFromJson(json);
-      
+
   Map<String, dynamic> toJson() => _$APIResultsToJson(this);
 }

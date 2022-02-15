@@ -164,10 +164,10 @@ class _FilmListState extends State<FilmList> {
           final query = (result as Success).value;
           inErrorState = false;
           trigger = true;
-          currentSearchList.addAll(query.results);       
+          currentSearchList.addAll(query.results);
           return _buildFilmList(context, currentSearchList);
         } else {
-          if ( currentSearchList.isEmpty) {
+          if (currentSearchList.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           } else {
             return _buildFilmList(context, currentSearchList);
@@ -192,7 +192,7 @@ class _FilmListState extends State<FilmList> {
           childAspectRatio: (itemWidth / itemHeight),
         ),
         itemCount: results.length,
-        itemBuilder: (BuildContext context, int index) {        
+        itemBuilder: (BuildContext context, int index) {
           return _buildFilmCard(filmListContext, results, index);
         },
       ),

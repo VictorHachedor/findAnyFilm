@@ -36,8 +36,8 @@ class AppRouter extends RouterDelegate
       pages: [
         if (!appStateManager.isInitialized) SplashScreen.page(),
         if (appStateManager.isInitialized && !appStateManager.isLoggedIn)
-        FilmList.page(),
-       // MainScreen.page(appStateManager.getSelectedTab),
+          FilmList.page(),
+        // MainScreen.page(appStateManager.getSelectedTab),
 
         if (appStateManager.didSelectCard) FilmDetails.page(),
 
@@ -65,7 +65,7 @@ class AppRouter extends RouterDelegate
     }
     // TODO: Handle state when user closes profile screen
 
-    if (route.settings.name == FindAnyMoviesPages.filmDetailsPath){
+    if (route.settings.name == FindAnyMoviesPages.filmDetailsPath) {
       appStateManager.tapOnCard(false);
     }
 

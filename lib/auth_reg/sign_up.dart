@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 
 class SignupWidget extends StatefulWidget {
-
   const SignupWidget({Key? key}) : super(key: key);
 
   @override
@@ -26,7 +25,7 @@ class _SignupWidgetState extends State<SignupWidget> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                 Padding(
+                  Padding(
                       padding: const EdgeInsets.only(left: 25, right: 25),
                       child: Column(children: [
                         buildTextFormFieldName(
@@ -127,7 +126,6 @@ class _SignupWidgetState extends State<SignupWidget> {
                       if (_formKey.currentState!.validate()) {
                         //TODO: Event happening while the button clicked
                       }
-
                     },
                     child: const Text('Submit',
                         style: TextStyle(

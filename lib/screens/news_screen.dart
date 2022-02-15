@@ -42,11 +42,11 @@ class _NewsScreenState extends State<NewsScreen> {
         child: ListView(
           scrollDirection: Axis.vertical,
           children: [
-              SizedBox(
-                height: 300,
-             width: MediaQuery.of(context).size.width,
-             child: TestSlider(),
-           ),
+            SizedBox(
+              height: 300,
+              width: MediaQuery.of(context).size.width,
+              child: TestSlider(),
+            ),
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(

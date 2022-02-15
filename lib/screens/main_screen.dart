@@ -53,15 +53,15 @@ class _MainScreenState extends State<MainScreen> {
             Provider.of<AppStateManager>(context, listen: false).goToTab(index);
           },
           items: const <BottomNavigationBarItem>[
-             BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Icon(Icons.aod),
               label: 'News',
             ),
-             BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Icon(Icons.movie),
               label: 'Films',
             ),
-             BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Icon(Icons.circle),
               label: 'Watchlist',
             ),

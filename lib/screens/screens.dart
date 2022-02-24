@@ -8,3 +8,4 @@ export 'film_list.dart';
 export 'film_card.dart';
 
 export 'news_screen.dart';
+export 'watchlist_screen.dart';

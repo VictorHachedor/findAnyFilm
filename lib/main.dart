@@ -1,3 +1,4 @@
+import 'package:find_any_movie/data/memory_repository.dart';
 import 'package:find_any_movie/models/app_state_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -46,6 +47,10 @@ class _MyAppState extends State<MyApp> {
           create: (context) => _appStateManager,
         ),
         // TODO add ChangeNotifierProvider
+        ChangeNotifierProvider<MemoryRepository>(
+          lazy: false,
+          create: (_) => MemoryRepository(),
+          )
       ],
       child: MaterialApp(
         title: 'Find Any Movies',

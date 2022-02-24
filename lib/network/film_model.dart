@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:find_any_movie/data/models/data_models.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'film_model.g.dart';
 
@@ -21,7 +22,16 @@ class APIFilmQuery {
 
 @JsonSerializable()
 class APIResults {
+  int? id;
   String? title;
+  double? popularity;
+  String? overview;
+
+  @JsonKey(name: 'release_date')
+  String? releaseDate;
+
+  @JsonKey(name: 'genre_ids')
+  List<dynamic>? genreIds;
 
   @JsonKey(name: 'poster_path')
   String? posterPath;
@@ -29,10 +39,100 @@ class APIResults {
   APIResults({
     required this.title,
     required this.posterPath,
+    required this.id,
+    required this.popularity,
+    required this.overview,
+    required this.releaseDate,
+    required this.genreIds,
   });
 
   factory APIResults.fromJson(Map<String, dynamic> json) =>
       _$APIResultsFromJson(json);
 
   Map<String, dynamic> toJson() => _$APIResultsToJson(this);
+}
+
+@JsonSerializable()
+class APICreditsQuery {
+  List<APICast>? cast;
+  List<APICrew>? crew;
+
+  APICreditsQuery({required this.cast});
+
+  factory APICreditsQuery.fromJson(Map<String, dynamic> json) =>
+      _$APICreditsQueryFromJson(json);
+
+  Map<String, dynamic> toJson() => _$APICreditsQueryToJson(this);
+}
+
+@JsonSerializable()
+class APICast {
+  @JsonKey(name: 'name')
+  String? actorsName;
+
+  String? character;
+
+  APICast({required this.actorsName, required this.character});
+
+  factory APICast.fromJson(Map<String, dynamic> json) =>
+      _$APICastFromJson(json);
+
+  Map<String, dynamic> toJson() => _$APICastToJson(this);
+}
+
+@JsonSerializable()
+class APICrew {
+  @JsonKey(name: 'name')
+  String? crewMemberName;
+
+  String? job;
+
+  APICrew({required this.crewMemberName, required this.job});
+
+  factory APICrew.fromJson(Map<String, dynamic> json) =>
+      _$APICrewFromJson(json);
+
+  Map<String, dynamic> toJson() => _$APICrewToJson(this);
+}
+
+@JsonSerializable()
+class APIFilmDetailsQuery {
+  List<APIGenre>? genres;
+  int? runtime;
+
+  APIFilmDetailsQuery({required this.genres, required this.runtime});
+
+  factory APIFilmDetailsQuery.fromJson(Map<String, dynamic> json) =>
+      _$APIFilmDetailsQueryFromJson(json);
+
+  Map<String, dynamic> toJson() => _$APIFilmDetailsQueryToJson(this);
+}
+
+@JsonSerializable()
+class APIGenre {
+  @JsonKey(name: 'name')
+  String? genreName;
+
+  APIGenre({required this.genreName});
+
+  factory APIGenre.fromJson(Map<String, dynamic> json) =>
+      _$APIGenreFromJson(json);
+
+  Map<String, dynamic> toJson() => _$APIGenreToJson(this);
+}
+
+List<SavedFilmModel> savedFilmConverter(
+    List<APIResults> apiResults, APIFilmDetailsQuery apiDetails) {
+  final savedFilmFeatures = <SavedFilmModel>[];
+
+  for (var apiResult in apiResults) {
+    savedFilmFeatures.add(SavedFilmModel(
+      id: apiResult.id,
+      image: apiResult.posterPath,
+        title: apiResult.title,
+        popularity: apiResult.popularity,
+        runtime: apiDetails
+            .runtime)); // TODO runtime: apiDetails.runtime - potential problem
+  }
+  return savedFilmFeatures;
 }

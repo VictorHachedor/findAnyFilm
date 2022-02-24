@@ -24,7 +24,7 @@ class _MainScreenState extends State<MainScreen> {
   static List<Widget> pages = <Widget>[
     NewsScreen(),
     FilmList(),
-    //TODO add Series screen
+    WatchlistScreen(),
   ];
 
   @override

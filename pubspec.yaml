@@ -19,9 +19,9 @@ dependencies:
   flutter_slidable: ^0.6.0
   flutter_svg: ^0.22.0
   shared_preferences: ^2.0.13
-  json_annotation: ^4.1.0
+  json_annotation: ^4.4.0
 
-  chopper: ^4.0.1
+  chopper: ^4.0.5
   logging: ^1.0.1
   provider: ^6.0.1
   equatable: ^2.0.3
@@ -35,10 +35,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  build_runner: ^2.1.1
+  build_runner: ^2.1.7
   json_serializable: ^6.1.4
-  chopper_generator: ^4.0.1
-  drift_dev: ^1.0.0
+  chopper_generator: ^4.0.5
+  drift_dev: ^1.4.0
 
   flutter_lints: ^1.0.4
 

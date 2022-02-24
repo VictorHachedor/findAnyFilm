@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class FindAnyMoviesTab {
   static const int news = 0;
   static const int films = 1;
-  //TODO add series
+  static const int watchlist = 2;
 }
 
 class AppStateManager extends ChangeNotifier {

@@ -12,6 +12,7 @@ import '../models/models.dart';
 import '../network/film_model.dart';
 import '../network/film_service.dart';
 import '../network/model_response.dart';
+import '../data/models/data_models.dart';
 
 class FilmList extends StatefulWidget {
   static MaterialPage page() {
@@ -163,7 +164,7 @@ class _FilmListState extends State<FilmList> {
 
           final query = (result as Success).value;
           inErrorState = false;
-          trigger = true;
+          trigger = true; // TODO need?
           currentSearchList.addAll(query.results);
           return _buildFilmList(context, currentSearchList);
         } else {
@@ -178,7 +179,9 @@ class _FilmListState extends State<FilmList> {
   }
 
   Widget _buildFilmList(
-      BuildContext filmListContext, List<APIResults> results) {
+    BuildContext filmListContext,
+    List<APIResults> results,
+  ) {
     final size = MediaQuery.of(context).size;
     const itemHeight = 310;
     final itemWidth = size.width / 2;
@@ -200,19 +203,72 @@ class _FilmListState extends State<FilmList> {
   }
 
   Widget _buildFilmCard(
-      BuildContext topLevelContext, List<APIResults> results, int index) {
+    BuildContext topLevelContext,
+    List<APIResults> results,
+    int index,
+  ) {
     final result = results[index];
     return GestureDetector(
       onTap: () {
         //TODO add navigator 2.0
-
-        Navigator.push(topLevelContext, MaterialPageRoute(
+        runtimeAndGenresWidget(topLevelContext, result);
+         Navigator.push(topLevelContext, MaterialPageRoute(
           builder: (context) {
-            return const FilmDetails();
+            final detailFilm = FilmModel(
+              id: result.id,
+              popularity: result.popularity,
+              title: result.title,
+              image: result.posterPath,
+              overview: result.overview,
+              releaseDate: result.releaseDate,
+            );
+            return FilmDetails(film: detailFilm); 
           },
         ));
       },
       child: filmCard(result),
     );
+  }
+
+  Widget runtimeAndGenresWidget(
+    BuildContext topLevelContext,
+    APIResults result,
+  ) {
+    return FutureBuilder<Response<Result<APIFilmDetailsQuery>>>(
+        future: FilmDetailsService.create().queryFilmsDetails(result.id!),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(snapshot.error.toString(),
+                    textAlign: TextAlign.center, textScaleFactor: 1.3),
+              );
+            }
+
+            final result = snapshot.data?.body;
+            if (result is Error) {
+              const Text('result is Error');
+            }
+
+            final value = (result as Success).value;
+
+            Navigator.push(topLevelContext, MaterialPageRoute(
+              builder: (context) {
+                final detailFilm = FilmModel(
+                  //      id: result.id,
+                  //      popularity: result.popularity,
+                  //     title: result.title,
+                  //      image: result.posterPath,
+                  //      overview: result.overview,
+                  //      releaseDate: result.releaseDate,
+                  runtime: value.runtime,
+                );
+                return FilmDetails(film: detailFilm);
+              },
+            ));
+          }
+          print('555555555555555555555555555555');
+          return Text('');
+        });
   }
 }

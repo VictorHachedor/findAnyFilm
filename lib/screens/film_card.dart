@@ -4,7 +4,7 @@ import '../network/film_model.dart';
 
 Widget filmCard(APIResults result) {
   const String imageBaseUrl =
-      'https://www.themoviedb.org/t/p/w300_and_h450_bestv2';
+      'https://www.themoviedb.org/t/p/w300_and_h450_bestv2';  
   return Card(
     elevation: 0.0,
     shape: RoundedRectangleBorder(
@@ -21,7 +21,7 @@ Widget filmCard(APIResults result) {
             child: CachedNetworkImage(
                 imageUrl: imageBaseUrl +
                     (result.posterPath ?? '/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg'),
-                //(imageBaseUrl + result.posterPath) ?? '/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg') - try
+                //  (imageBaseUrl + result.posterPath == null) ?? '/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg',
                 height: 258,
                 width: 200,
                 fit: BoxFit.fill)),

@@ -1,4 +1,5 @@
 import 'package:find_any_movie/auth_reg/auth_reg_home.dart';
+import 'package:find_any_movie/data/models/data_models.dart';
 import 'package:find_any_movie/models/app_state_manager.dart';
 import 'package:find_any_movie/models/models.dart';
 import 'package:find_any_movie/screens/film_details.dart';
@@ -36,10 +37,10 @@ class AppRouter extends RouterDelegate
       pages: [
         if (!appStateManager.isInitialized) SplashScreen.page(),
         if (appStateManager.isInitialized && !appStateManager.isLoggedIn)
-          FilmList.page(),
-        // MainScreen.page(appStateManager.getSelectedTab),
+         // FilmList.page(),
+         MainScreen.page(appStateManager.getSelectedTab),
 
-        if (appStateManager.didSelectCard) FilmDetails.page(),
+      //  if (appStateManager.didSelectCard) FilmDetails.page(),
 
         //  if (appStateManager.isLoggedIn) MainScreen.page(),
         // TODO: Add Profile(movie) Screen

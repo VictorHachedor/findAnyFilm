@@ -9,3 +9,4 @@ class Error<T> extends Result<T> {
   final Exception exception;
   Error(this.exception);
 }
+

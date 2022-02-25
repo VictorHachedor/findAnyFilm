@@ -81,13 +81,25 @@ APIFilmDetailsQuery _$APIFilmDetailsQueryFromJson(Map<String, dynamic> json) =>
           ?.map((e) => APIGenre.fromJson(e as Map<String, dynamic>))
           .toList(),
       runtime: json['runtime'] as int?,
-    );
+    )
+      ..id = json['id'] as int?
+      ..popularity = (json['popularity'] as num?)?.toDouble()
+      ..image = json['poster_path'] as String?
+      ..title = json['title'] as String?
+      ..overview = json['overview'] as String?
+      ..releaseDate = json['release_date'] as String?;
 
 Map<String, dynamic> _$APIFilmDetailsQueryToJson(
         APIFilmDetailsQuery instance) =>
     <String, dynamic>{
-      'genres': instance.genres,
+      'id': instance.id,
       'runtime': instance.runtime,
+      'popularity': instance.popularity,
+      'genres': instance.genres,
+      'poster_path': instance.image,
+      'title': instance.title,
+      'overview': instance.overview,
+      'release_date': instance.releaseDate,
     };
 
 APIGenre _$APIGenreFromJson(Map<String, dynamic> json) => APIGenre(

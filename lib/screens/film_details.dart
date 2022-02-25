@@ -12,34 +12,13 @@ import '../network/film_service.dart';
 import '../network/model_response.dart';
 import '../data/models/data_models.dart';
 
-class FilmDetails extends StatefulWidget {
-  /*  MaterialPage page() {
-    return MaterialPage(
-      name: FindAnyMoviesPages.filmDetailsPath,
-      key: ValueKey(FindAnyMoviesPages.filmDetailsPath),
-      child: FilmDetails(film: film,),
-    );
-  }*/
-
+class FilmDetails extends StatelessWidget {
   const FilmDetails({Key? key, required this.film}) : super(key: key);
   final FilmModel film;
-
-  @override
-  _FilmDetailsState createState() => _FilmDetailsState(film); //stateless?
-}
-
-class _FilmDetailsState extends State<FilmDetails> {
-  final FilmModel film;
-
-  _FilmDetailsState(this.film);
-
   @override
   Widget build(BuildContext context) {
-    const String imageBaseUrl =
-        'https://www.themoviedb.org/t/p/w300_and_h450_bestv2';
     final repository = Provider.of<MemoryRepository>(context);
     final size = MediaQuery.of(context).size;
-    SavedFilmModel savedFilm;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -52,10 +31,10 @@ class _FilmDetailsState extends State<FilmDetails> {
                   children: [
                     Align(
                       alignment: Alignment.topLeft,
-                      child: CachedNetworkImage(
-                        // TODO 1
-                        imageUrl: imageBaseUrl + (film.image ?? ''),
-                        // 'https://www.edamam.com/web-img/e42/e42f9119813e890af34c259785ae1cfb.jpg',
+                      child:                     
+                      CachedNetworkImage(
+                        imageUrl:  GetImageUrl.imageUrl(film.image ?? ''),                
+                        errorWidget:(context, url, error) => Image.asset('assets/default-image.jpg'),
                         alignment: Alignment.topLeft,
                         fit: BoxFit.fill,
                         width: size.width,
@@ -103,7 +82,7 @@ class _FilmDetailsState extends State<FilmDetails> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Chip(
-                    label: runtimeAndGenresWidget(film, 'runtime', null),
+                    label: Text('${film.runtime}'),
                   ),
                 ),
                 const SizedBox(
@@ -111,7 +90,7 @@ class _FilmDetailsState extends State<FilmDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
-                  child: runtimeAndGenresWidget(film, null, 'genres'),
+                  child: genresWidget(film),
                 ),
                 const SizedBox(
                   height: 16,
@@ -138,12 +117,11 @@ class _FilmDetailsState extends State<FilmDetails> {
                           borderRadius: BorderRadius.circular(16.0)),
                     ),
                     onPressed: () {
-                      
-                        repository.insertFilm(SavedFilmModel(
+                      repository.insertFilm(SavedFilmModel(
                           id: film.id ?? 0,
                           image: film.image ?? '',
                           title: film.title ?? '',
-                          runtime: film.runtime,
+                          runtime: film.runtime ?? 0,
                           popularity: film.popularity ?? 0.0));
                       Navigator.pop(context);
                     },
@@ -165,50 +143,18 @@ class _FilmDetailsState extends State<FilmDetails> {
     );
   }
 
-  Widget runtimeAndGenresWidget(
-      FilmModel film, String? runtimeMark, String? genresMark) {
-    return FutureBuilder<Response<Result<APIFilmDetailsQuery>>>(
-        future: FilmDetailsService.create().queryFilmsDetails(film.id!),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString(),
-                    textAlign: TextAlign.center, textScaleFactor: 1.3),
-              );
-            }
-
-            final result = snapshot.data?.body;
-            if (result is Error) {
-              const Text('result is Error');
-            }
-
-            final value = (result as Success).value;
-
-            if (genresMark != null) {
-              final genres = value.genres;
-              List<APIGenre> genresList = genres;
-              List<String?> genresNames = [];
-              for (var i = 0; i < genresList.length; i++) {
-                genresNames.add(genresList[i].genreName);
-              }
-              final genresString = genresNames.join(', ');
-              return Container(
-                height: (23.0 * genresList.length),
-                child: Text(genresString,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    )),
-              );
-            } else if (runtimeMark != null) {
-              final savedFilm = SavedFilmModel();
-              final runtime = value.runtime;
-              savedFilm.runtime = runtime;
-              return Text('${runtime ?? 'Unknown'}');
-            }
-          }
-          return Text('Errorr runtimeWidgeteee');
-        });
+    Widget genresWidget(FilmModel film) {
+    final genres = film.genres;
+    List<APIGenre>? genresList = genres;
+    List<String?> genresNames = [];
+    for (var i = 0; i < genresList!.length; i++) {
+      genresNames.add(genresList[i].genreName);
+    }
+    final genresString = genresNames.join(', ');
+    return Text(genresString,
+        style: const TextStyle(
+          fontSize: 16,
+        ));
   }
 
   Widget crewAndCastWidget(
@@ -323,139 +269,4 @@ class _FilmDetailsState extends State<FilmDetails> {
           return const Text('Unknown');
         });
   }
-
-  Widget filmDetailsWidget(
-      FilmModel film,
-      // String? runtimeMark,
-      //   String? genresMark,
-      MemoryRepository repository) {
-    return FutureBuilder<Response<Result<APIFilmDetailsQuery>>>(
-        future: FilmDetailsService.create().queryFilmsDetails(film.id!),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString(),
-                    textAlign: TextAlign.center, textScaleFactor: 1.3),
-              );
-            }
-
-            final result = snapshot.data?.body;
-            if (result is Error) {
-              const Text('result is Error');
-            }
-
-            final value = (result as Success).value;
-            //   List filmDetails = value;
-            //     filmDetails[0].runtime;
-            return insertFilm(repository, value);
-            /*    if (genresMark != null) {
-              final genres = value.genres;
-              List<APIGenre> genresList = genres;
-              List<String?> genresNames = [];
-              for (var i = 0; i < genresList.length; i++) {
-                genresNames.add(genresList[i].genreName);
-              }
-              final genresString = genresNames.join(', ');
-              return Container(
-                height: (23.0 * genresList.length),
-                child: Text(genresString,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    )),
-              );
-            } else if (runtimeMark != null) {
-              final savedFilm = SavedFilmModel();
-              final runtime = value.runtime;
-              savedFilm.runtime = runtime;
-              return Text('${runtime ?? 'Unknown'}');
-            }*/
-          }
-          return Text('Errorr runtimeWidgeteee');
-        });
-  }
-
-  Widget insertFilm(MemoryRepository repository, dynamic value) {
-    repository.insertFilm(SavedFilmModel(
-      //   id: value.id,
-      // image: value.image,
-      // title: value.title,
-      runtime: value.runtime,
-      // popularity: value.popularity
-    ));
-    return Text('');
-  }
 }
-
-/*class GetRuntime {
-  int? runtime;
-  Widget runtimeAndGenresWidget(
-      FilmModel film, String? runtimeMark, String? genresMark) {
-    int runtime;
-    return FutureBuilder<Response<Result<APIFilmDetailsQuery>>>(
-        future: FilmDetailsService.create().queryFilmsDetails(film.id!),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString(),
-                    textAlign: TextAlign.center, textScaleFactor: 1.3),
-              );
-            }
-
-            final result = snapshot.data?.body;
-            if (result is Error) {
-              const Text('result is Error');
-            }
-
-            final value = (result as Success).value;
-
-            if (genresMark != null) {
-              final genres = value.genres;
-              List<APIGenre> genresList = genres;
-              List<String?> genresNames = [];
-              for (var i = 0; i < genresList.length; i++) {
-                genresNames.add(genresList[i].genreName);
-              }
-              final genresString = genresNames.join(', ');
-              return Container(
-                height: (23.0 * genresList.length),
-                child: Text(genresString,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    )),
-              );
-            } else if (runtimeMark != null) {
-              runtime = value.runtime;
-
-              return Text('${runtime}');
-            }
-          }
-          return Text('Errorr runtimeWidgeteee');
-        });
-  }
-
-  Future<SavedFilmModel?> fetchRuntime(FilmModel film) async {
-    try {
-      final result =
-          await FilmDetailsService.create().queryFilmsDetails(film.id!);
-      final body = result.body;
-      final asdfs = (body as Success).value;
-      int runtime = asdfs.runtime;
-      return SavedFilmModel(
-        runtime: runtime,
-      );
-    } catch (e) {
-      print(e);
-    }
-    return Future.value();
-  }
-
-  SavedFilmModel runtimeFunction(FilmModel film) {
-    final runtime = fetchRuntime(film);
-
-    return SavedFilmModel(
-      runtime: 0,
-    );
-  }
-}*/

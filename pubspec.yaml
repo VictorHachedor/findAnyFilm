@@ -51,6 +51,7 @@ flutter:
     - assets/slider_images/crown.jpg
     - assets/slider_images/blank.png
     - assets/images/
+    - assets/
 
 
   uses-material-design: true

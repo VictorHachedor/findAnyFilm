@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:find_any_movie/network/film_service.dart';
 import 'package:flutter/material.dart';
 import '../network/film_model.dart';
 
 Widget filmCard(APIResults result) {
   const String imageBaseUrl =
-      'https://www.themoviedb.org/t/p/w300_and_h450_bestv2';  
+      'https://www.themoviedb.org/t/p/w300_and_h450_bestv2';
   return Card(
     elevation: 0.0,
     shape: RoundedRectangleBorder(
@@ -14,17 +15,31 @@ Widget filmCard(APIResults result) {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(6.0),
-              topRight: Radius.circular(6.0),
-            ),
-            child: CachedNetworkImage(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(6.0),
+            topRight: Radius.circular(6.0),
+          ),
+          child: CachedNetworkImage(
+            // TODO 1
+
+            imageUrl: GetImageUrl.imageUrl(result.posterPath ?? ''),
+            
+            errorWidget: (context, url, error) =>
+                Image.asset('assets/default-image.jpg', height: 258,
+            width: 200,
+            fit: BoxFit.fill,),
+            height: 258,
+            width: 200,
+            fit: BoxFit.fill,
+          ),
+          /*  CachedNetworkImage(
                 imageUrl: imageBaseUrl +
                     (result.posterPath ?? '/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg'),
                 //  (imageBaseUrl + result.posterPath == null) ?? '/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg',
                 height: 258,
                 width: 200,
-                fit: BoxFit.fill)),
+                fit: BoxFit.fill)*/
+        ),
         Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: Container(

@@ -211,64 +211,44 @@ class _FilmListState extends State<FilmList> {
     return GestureDetector(
       onTap: () {
         //TODO add navigator 2.0
-        runtimeAndGenresWidget(topLevelContext, result);
-         Navigator.push(topLevelContext, MaterialPageRoute(
+        Navigator.push(topLevelContext, MaterialPageRoute(
           builder: (context) {
-            final detailFilm = FilmModel(
-              id: result.id,
-              popularity: result.popularity,
-              title: result.title,
-              image: result.posterPath,
-              overview: result.overview,
-              releaseDate: result.releaseDate,
-            );
-            return FilmDetails(film: detailFilm); 
+            return FutureBuilder<Response<Result<APIFilmDetailsQuery>>>(
+                future:
+                    FilmDetailsService.create().queryFilmsDetails(result.id!),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(snapshot.error.toString(),
+                            textAlign: TextAlign.center, textScaleFactor: 1.3),
+                      );
+                    }
+
+                    final result = snapshot.data?.body;
+                    if (result is Error) {
+                      const Text('result is Error');
+                    }
+
+                    final value = (result as Success).value;
+                    final detailFilm = FilmModel(
+                        id: value.id,
+              popularity: value.popularity,
+              title: value.title,
+              image: value.image,
+              overview: value.overview,
+              releaseDate: value.releaseDate,
+                      runtime: value.runtime,
+                      genres: value.genres,
+                    );
+                    return FilmDetails(film: detailFilm);
+                  }                
+                  return Center(child: CircularProgressIndicator(color: Colors.green));
+                });
           },
         ));
       },
       child: filmCard(result),
     );
-  }
-
-  Widget runtimeAndGenresWidget(
-    BuildContext topLevelContext,
-    APIResults result,
-  ) {
-    return FutureBuilder<Response<Result<APIFilmDetailsQuery>>>(
-        future: FilmDetailsService.create().queryFilmsDetails(result.id!),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString(),
-                    textAlign: TextAlign.center, textScaleFactor: 1.3),
-              );
-            }
-
-            final result = snapshot.data?.body;
-            if (result is Error) {
-              const Text('result is Error');
-            }
-
-            final value = (result as Success).value;
-
-            Navigator.push(topLevelContext, MaterialPageRoute(
-              builder: (context) {
-                final detailFilm = FilmModel(
-                  //      id: result.id,
-                  //      popularity: result.popularity,
-                  //     title: result.title,
-                  //      image: result.posterPath,
-                  //      overview: result.overview,
-                  //      releaseDate: result.releaseDate,
-                  runtime: value.runtime,
-                );
-                return FilmDetails(film: detailFilm);
-              },
-            ));
-          }
-          print('555555555555555555555555555555');
-          return Text('');
-        });
   }
 }

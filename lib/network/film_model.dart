@@ -97,9 +97,20 @@ class APICrew {
 
 @JsonSerializable()
 class APIFilmDetailsQuery {
-  List<APIGenre>? genres;
+  int? id;
   int? runtime;
+  double? popularity;
+  List<APIGenre>? genres;
 
+  @JsonKey(name: 'poster_path')
+  String? image;
+
+  String? title;
+  String? overview;
+
+  @JsonKey(name: 'release_date')
+  String? releaseDate;
+  
   APIFilmDetailsQuery({required this.genres, required this.runtime});
 
   factory APIFilmDetailsQuery.fromJson(Map<String, dynamic> json) =>

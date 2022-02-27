@@ -1,16 +1,9 @@
+import 'package:find_any_movie/themes.dart';
 import 'package:flutter/material.dart';
-import '../models/models.dart';
 import 'sign_up.dart';
 import 'auth.dart';
 
 class AuthRegHome extends StatefulWidget {
-  static MaterialPage page() {
-    return MaterialPage(
-      name: FindAnyMoviesPages.authRegHomePath,
-      key: ValueKey(FindAnyMoviesPages.authRegHomePath),
-      child: const AuthRegHome(),
-    );
-  }
 
   const AuthRegHome({Key? key}) : super(key: key);
 
@@ -28,11 +21,10 @@ class _AuthRegHomeState extends State<AuthRegHome> {
         appBar: AppBar(
           toolbarHeight: 10.0,
           elevation: 0.0,
-          backgroundColor: const Color.fromRGBO(6, 10, 20, 0.9),
-          bottom: const TabBar(
-            //TODO maybe get rid of splash
+          backgroundColor: FilmTheme.backgroundColor,
+          bottom: const TabBar(         
             unselectedLabelColor: Colors.grey,
-            labelColor: Color.fromRGBO(120, 240, 120, 1.0),
+            labelColor: FilmTheme.acidGreenColor,
             labelStyle: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w600),
             indicatorColor: Color.fromARGB(0, 6, 10, 20),
             tabs: <Widget>[Tab(text: 'Login'), Tab(text: 'Sign Up')],

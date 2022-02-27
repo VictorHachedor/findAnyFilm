@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/models.dart';
 
 class TestSlider extends StatefulWidget {
-  static MaterialPage page() {
-    return MaterialPage(
-      name: FindAnyMoviesPages.testSliderPath,
-      key: ValueKey(FindAnyMoviesPages.testSliderPath),
-      child: const TestSlider(),
-    );
-  }
 
   const TestSlider({
     Key? key,
@@ -20,7 +12,7 @@ class TestSlider extends StatefulWidget {
 
 /// AnimationControllers can be created with `vsync: this` because of TickerProviderStateMixin.
 class _TestSliderState extends State<TestSlider>
-    with TickerProviderStateMixin, SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   int index = 0;
   late Animation<double> _animation;
   late AnimationController _controller;
@@ -220,15 +212,7 @@ class _TestSliderState extends State<TestSlider>
                                 buildGreenButton(5),
                               ]),
                         ),
-                      ]))),
-              /* const SizedBox(
-                height: 2,
-              ),
-              Container(
-                color: Colors.white,
-                height: 30,
-                width: 450,
-              )*/
+                      ])))             
             ])
           ],
         ),

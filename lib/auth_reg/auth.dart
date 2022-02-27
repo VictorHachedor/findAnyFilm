@@ -1,7 +1,7 @@
 //Login Sign Up green color
+import 'package:find_any_movie/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/models.dart';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class _AuthWidgetState extends State<AuthWidget> {
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
     return Scaffold(
-        backgroundColor: const Color.fromRGBO(6, 10, 20, 0.9),
+        backgroundColor: FilmTheme.backgroundColor,
         body: SafeArea(
           child: Form(
               key: _formKey,
@@ -46,7 +46,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                       onPressed: () {},
                       child: const Text('Forgot your password?',
                           style: TextStyle(
-                              color: Color.fromRGBO(120, 240, 120, 1.0),
+                              color: FilmTheme.acidGreenColor,                             
                               fontSize: 17.0))),
                   ElevatedButton(
                     style: ButtonStyle(
@@ -63,10 +63,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         //TODO: Event happening while the button clicked
-                      }
-
-                      Provider.of<AppStateManager>(context, listen: false)
-                          .login('mockUsername', 'mockPassword');
+                      }                      
                     },
                     child: const Text('Log in',
                         style: TextStyle(

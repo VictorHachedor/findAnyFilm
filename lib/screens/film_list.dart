@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import 'film_card.dart';
 import 'film_details.dart';
@@ -8,20 +9,12 @@ import 'film_details.dart';
 import 'package:chopper/chopper.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/models.dart';
 import '../network/film_model.dart';
 import '../network/film_service.dart';
 import '../network/model_response.dart';
 import '../data/models/data_models.dart';
 
 class FilmList extends StatefulWidget {
-  static MaterialPage page() {
-    return MaterialPage(
-      name: FindAnyMoviesPages.filmListPath,
-      key: ValueKey(FindAnyMoviesPages.filmListPath),
-      child: const FilmList(),
-    );
-  }
 
   const FilmList({Key? key}) : super(key: key);
 
@@ -210,6 +203,7 @@ class _FilmListState extends State<FilmList> {
     final result = results[index];
     return GestureDetector(
       onTap: () {
+     //   Provider.of<AppStateManager>(context, listen: false).tapOnCard(true);
         //TODO add navigator 2.0
         Navigator.push(topLevelContext, MaterialPageRoute(
           builder: (context) {
@@ -232,21 +226,23 @@ class _FilmListState extends State<FilmList> {
 
                     final value = (result as Success).value;
                     final detailFilm = FilmModel(
-                        id: value.id,
-              popularity: value.popularity,
-              title: value.title,
-              image: value.image,
-              overview: value.overview,
-              releaseDate: value.releaseDate,
+                      id: value.id,
+                      popularity: value.voteAverage,
+                      title: value.title,
+                      image: value.image,
+                      overview: value.overview,
+                      releaseDate: value.releaseDate,
                       runtime: value.runtime,
                       genres: value.genres,
                     );
                     return FilmDetails(film: detailFilm);
-                  }                
-                  return Center(child: CircularProgressIndicator(color: Colors.green));
+                  }
+                  return const Center(
+                      child: CircularProgressIndicator(color: Colors.green));
                 });
           },
-        ));
+        )
+        );
       },
       child: filmCard(result),
     );

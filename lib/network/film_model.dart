@@ -110,7 +110,10 @@ class APIFilmDetailsQuery {
 
   @JsonKey(name: 'release_date')
   String? releaseDate;
-  
+
+  @JsonKey(name: 'vote_average')
+  double? voteAverage;
+
   APIFilmDetailsQuery({required this.genres, required this.runtime});
 
   factory APIFilmDetailsQuery.fromJson(Map<String, dynamic> json) =>
@@ -130,20 +133,4 @@ class APIGenre {
       _$APIGenreFromJson(json);
 
   Map<String, dynamic> toJson() => _$APIGenreToJson(this);
-}
-
-List<SavedFilmModel> savedFilmConverter(
-    List<APIResults> apiResults, APIFilmDetailsQuery apiDetails) {
-  final savedFilmFeatures = <SavedFilmModel>[];
-
-  for (var apiResult in apiResults) {
-    savedFilmFeatures.add(SavedFilmModel(
-      id: apiResult.id,
-      image: apiResult.posterPath,
-        title: apiResult.title,
-        popularity: apiResult.popularity,
-        runtime: apiDetails
-            .runtime)); // TODO runtime: apiDetails.runtime - potential problem
-  }
-  return savedFilmFeatures;
 }

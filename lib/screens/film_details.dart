@@ -1,16 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:find_any_movie/data/memory_repository.dart';
 import 'package:find_any_movie/data/models/data_models.dart';
+import 'package:find_any_movie/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import '../models/models.dart';
 
 import 'package:chopper/chopper.dart';
 import '../network/film_model.dart';
 import '../network/film_service.dart';
 import '../network/model_response.dart';
 import '../data/models/data_models.dart';
+
+
 
 class FilmDetails extends StatelessWidget {
   const FilmDetails({Key? key, required this.film}) : super(key: key);
@@ -23,7 +25,7 @@ class FilmDetails extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            color: Colors.white,
+            color: FilmTheme.backgroundColor,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -31,10 +33,10 @@ class FilmDetails extends StatelessWidget {
                   children: [
                     Align(
                       alignment: Alignment.topLeft,
-                      child:                     
-                      CachedNetworkImage(
-                        imageUrl:  GetImageUrl.imageUrl(film.image ?? ''),                
-                        errorWidget:(context, url, error) => Image.asset('assets/default-image.jpg'),
+                      child: CachedNetworkImage(
+                        imageUrl: GetImageUrl.imageUrl(film.image ?? ''),
+                        errorWidget: (context, url, error) =>
+                            Image.asset('assets/default-image.jpg'),
                         alignment: Alignment.topLeft,
                         fit: BoxFit.fill,
                         width: size.width,
@@ -48,8 +50,8 @@ class FilmDetails extends StatelessWidget {
                         child: BackButton(
                           color: Colors.white,
                           onPressed: () {
-                            Provider.of<AppStateManager>(context, listen: false)
-                                .tapOnCard(false);
+                            // Provider.of<AppStateManager>(context, listen: false)
+                            //     .tapOnCard(false);
                           },
                         ),
                       ),
@@ -61,80 +63,113 @@ class FilmDetails extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 16.0),
-                  child: Text(
-                    // TODO 2
-                    film.title ?? '',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Chip(
-                    label: Text(film.releaseDate ?? ''),
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Chip(
-                    label: Text('${film.runtime}'),
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: genresWidget(film),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Text('Cast and Crew'),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text('Directors'),
-                crewAndCastWidget(film, 'directors', null),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text('Cast'),
-                crewAndCastWidget(film, null, 'actors'),
-                const SizedBox(
-                  height: 16,
-                ),
-                Center(
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0)),
-                    ),
-                    onPressed: () {
-                      repository.insertFilm(SavedFilmModel(
-                          id: film.id ?? 0,
-                          image: film.image ?? '',
-                          title: film.title ?? '',
-                          runtime: film.runtime ?? 0,
-                          popularity: film.popularity ?? 0.0));
-                      Navigator.pop(context);
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/images/icon_bookmark.svg',
-                      color: Colors.white,
-                    ),
-                    label: const Text(
-                      'Bookmark',
-                      style: TextStyle(color: Colors.white),
+                  child: Center(
+                    child: Text(
+                      // TODO 2
+                      film.title ?? '',
+                      style: FilmTheme.textTheme.headline1,
                     ),
                   ),
                 ),
+                const SizedBox(
+                  height: 26,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Material(
+                        type: MaterialType.circle,
+                        clipBehavior: Clip.antiAlias,
+                        color: FilmTheme.backgroundColor,
+                        child: IconButton(
+                            icon: const Icon(
+                              Icons.bookmark_border,
+                              color: FilmTheme.acidGreenColor,
+                            ),
+                            onPressed: () {
+                              repository.insertFilm(SavedFilmModel(
+                                  id: film.id ?? 0,
+                                  image: film.image ?? '',
+                                  title: film.title ?? '',
+                                  runtime: film.runtime ?? 0,
+                                  popularity: film.popularity ?? 0.0));
+                              Navigator.pop(context);
+                            },
+                            splashRadius: 30.0,
+                            splashColor: FilmTheme.acidGreenColor),
+                      ),
+                      Text('Save', style: FilmTheme.textTheme.bodyText1)
+                    ],
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                  child: Divider(
+                    thickness: 0.5,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Padding(
+                    padding: EdgeInsets.only(left: 25.0, right: 25.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            releaseDateTransformer(),
+                            Text('  •  ${film.runtime}min',
+                                style: FilmTheme.textTheme.bodyText2),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        genresWidget(film),
+                        const SizedBox(
+                          height: 32,
+                        ),
+                        Text(
+                          '${film.overview}',
+                          style: FilmTheme.textTheme.bodyText2,
+                        ),
+                        const SizedBox(
+                          height: 32,
+                        ),
+                        Text('Cast & Crew',
+                            style: FilmTheme.textTheme.headline2),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Text('Directors', style: FilmTheme.textTheme.bodyText2),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        crewAndCastWidget(film, 'directors', null),
+                        const SizedBox(
+                          height: 33,
+                        ),
+                        Text('Cast', style: FilmTheme.textTheme.bodyText2),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        crewAndCastWidget(film, null, 'actors'),
+                        const SizedBox(
+                          height: 64,
+                        ),
+                        Center(
+                          child: SvgPicture.asset('assets/tmdb_blue_short.svg',
+                              color: const Color.fromRGBO(1, 180, 228, 0.9)),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ))
               ],
             ),
           ),
@@ -143,18 +178,31 @@ class FilmDetails extends StatelessWidget {
     );
   }
 
-    Widget genresWidget(FilmModel film) {
+  Widget genresWidget(FilmModel film) {
     final genres = film.genres;
     List<APIGenre>? genresList = genres;
     List<String?> genresNames = [];
     for (var i = 0; i < genresList!.length; i++) {
       genresNames.add(genresList[i].genreName);
     }
-    final genresString = genresNames.join(', ');
-    return Text(genresString,
-        style: const TextStyle(
-          fontSize: 16,
-        ));
+    final genresString = genresNames.join('     ');
+    return Text(genresString, style: FilmTheme.textTheme.bodyText2);
+  }
+
+  Widget releaseDateTransformer() {
+    final date = film.releaseDate;
+    final String year = (date ?? '').substring(0, 4);
+    final String month = (date ?? '').substring(5, 7);
+    final String day = (date ?? '').substring(8, 10);
+    List newDate = [
+      day,
+      month,
+      year,
+    ];
+    return Text(
+      newDate.join('/'),
+      style: FilmTheme.textTheme.bodyText2,
+    );
   }
 
   Widget crewAndCastWidget(
@@ -201,17 +249,18 @@ class FilmDetails extends StatelessWidget {
                       return Container(
                         padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: Colors.amber,
+                          color: FilmTheme.backgroundColor,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             color: Colors.grey,
-                            width: 2.0,
+                            width: 1.0,
                           ),
                         ),
                         child: Center(
                           child: Text(
                             directors[index],
                             overflow: TextOverflow.ellipsis,
+                            style: FilmTheme.textTheme.bodyText2,
                           ),
                         ),
                       );
@@ -219,7 +268,10 @@ class FilmDetails extends StatelessWidget {
                   ),
                 );
               } else {
-                return const Text('Unknown');
+                return Text(
+                  'Unknown',
+                  style: FilmTheme.textTheme.bodyText2,
+                );
               }
             } else if (actorsMark != null) {
               List<APICast> cast = value.cast;
@@ -245,24 +297,28 @@ class FilmDetails extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         height: 70,
                         decoration: BoxDecoration(
-                          color: Colors.amber,
+                          color: FilmTheme.backgroundColor,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             color: Colors.grey,
-                            width: 2.0,
+                            width: 1.0,
                           ),
                         ),
                         child: Center(
                             child: Text(
                           actorsNames[index],
                           overflow: TextOverflow.ellipsis,
+                          style: FilmTheme.textTheme.bodyText2,
                         )),
                       );
                     },
                   ),
                 );
               } else {
-                const Text('Unknown');
+                Text(
+                  'Unknown',
+                  style: FilmTheme.textTheme.bodyText2,
+                );
               }
             }
           }

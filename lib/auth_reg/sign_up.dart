@@ -1,5 +1,6 @@
 //TODO  login and signup buttons toggle
 // TODO when all fields are filled out correctly the button turns green
+import 'package:find_any_movie/themes.dart';
 import 'package:flutter/material.dart';
 
 class SignupWidget extends StatefulWidget {
@@ -18,7 +19,7 @@ class _SignupWidgetState extends State<SignupWidget> {
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(6, 10, 20, 0.9),
+      backgroundColor: FilmTheme.backgroundColor,
       body: SafeArea(
         child: Form(
             key: _formKey,

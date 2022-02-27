@@ -87,7 +87,8 @@ APIFilmDetailsQuery _$APIFilmDetailsQueryFromJson(Map<String, dynamic> json) =>
       ..image = json['poster_path'] as String?
       ..title = json['title'] as String?
       ..overview = json['overview'] as String?
-      ..releaseDate = json['release_date'] as String?;
+      ..releaseDate = json['release_date'] as String?
+      ..voteAverage = (json['vote_average'] as num?)?.toDouble();
 
 Map<String, dynamic> _$APIFilmDetailsQueryToJson(
         APIFilmDetailsQuery instance) =>
@@ -100,6 +101,7 @@ Map<String, dynamic> _$APIFilmDetailsQueryToJson(
       'title': instance.title,
       'overview': instance.overview,
       'release_date': instance.releaseDate,
+      'vote_average': instance.voteAverage,
     };
 
 APIGenre _$APIGenreFromJson(Map<String, dynamic> json) => APIGenre(

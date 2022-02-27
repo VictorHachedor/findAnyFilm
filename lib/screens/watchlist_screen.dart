@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:find_any_movie/data/memory_repository.dart';
 import 'package:find_any_movie/data/models/data_models.dart';
+import 'package:find_any_movie/network/film_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,7 @@ class WatchlistScreen extends StatefulWidget {
 class _WatchlistScreenState extends State<WatchlistScreen> {
   List<SavedFilmModel> savedFilms = [];
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: _buildSavedFilmsList(context),
@@ -49,17 +50,26 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: ListTile(
                         leading: CachedNetworkImage(
-                            imageUrl: imageBaseUrl + (savedFilm.image ?? ''),
+                            imageUrl:
+                                GetImageUrl.imageUrl(savedFilm.image ?? ''),
+                            errorWidget: (context, url, error) =>
+                                Image.asset('assets/default-image.jpg'),
                             height: 120,
                             width: 60,
                             fit: BoxFit.cover),
                         isThreeLine: true,
                         title: Text(savedFilm.title ?? ' '),
-                        subtitle: Row(children: [
-                          Icon(Icons.arrow_circle_up, color: Colors.green),
-                          Text('${savedFilm.popularity ?? ' '}'),
-
-                        ],),
+                        subtitle: Row(
+                          children: [
+                            Text('User Score: '),
+                            Icon(
+                              Icons.arrow_upward,
+                              color: Colors.green,
+                              size: 15,
+                            ),
+                            Text('${(savedFilm.popularity! * 10)}%'),
+                          ],
+                        ),
                         trailing: Text('${savedFilm.runtime ?? ' '}'),
                       ),
                     ),
@@ -94,8 +104,7 @@ void deleteSavedFilm(
     MemoryRepository repository, SavedFilmModel savedFilm) async {
   if (savedFilm.id != null) {
     repository.deleteSavedFilm(savedFilm);
- //   setState(() {});
-  } else{
+  } else {
     print('Recipe id is null');
   }
 }

@@ -1,19 +1,11 @@
 import 'package:find_any_movie/screens/film_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/models.dart';
 import 'screens.dart';
 import 'package:chopper/chopper.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({Key? key}) : super(key: key);
-  static MaterialPage page() {
-    return MaterialPage(
-      name: FindAnyMoviesPages.newsPath,
-      key: ValueKey(FindAnyMoviesPages.newsPath),
-      child: const NewsScreen(),
-    );
-  }
 
   @override
   _NewsScreenState createState() => _NewsScreenState();
@@ -150,7 +142,7 @@ class _NewsScreenState extends State<NewsScreen> {
   Widget buildCard(int index) {
     return GestureDetector(
       onTap: () {
-        Provider.of<AppStateManager>(context, listen: false).tapOnCard(true);
+
       },
       child: cards[index],
     );

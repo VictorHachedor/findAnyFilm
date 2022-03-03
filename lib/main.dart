@@ -1,6 +1,7 @@
-import 'package:find_any_movie/data/memory_repository.dart';
+//import 'package:find_any_movie/data/memory_repository.dart';
+import 'package:find_any_movie/data/drift/drift_repository.dart';
 import 'package:find_any_movie/data/repository.dart';
-import 'package:find_any_movie/data/sqlite/sqlite_repository.dart';
+//import 'package:find_any_movie/data/sqlite/sqlite_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:logging/logging.dart';
@@ -9,7 +10,8 @@ import 'screens/screens.dart';
 Future<void> main() async {
   _setupLogging();
   WidgetsFlutterBinding.ensureInitialized();
-  final repository = SqliteRepository();
+  // final repository = SqliteRepository();
+  final repository = DriftRepository();
   await repository.init();
   runApp(MyApp(repository: repository));
 }

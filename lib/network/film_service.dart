@@ -8,11 +8,11 @@ part 'film_service.chopper.dart';
 const String apiKey = 'ca907ef19d5ba9c507df9ed359b28378';
 const String apiUrl = 'https://api.themoviedb.org/3';
 
-class GetImageUrl{
- static const _imageUrl = 'https://www.themoviedb.org/t/p/w300_and_h450_bestv2';
-static String imageUrl(String imagePath) => _imageUrl + imagePath; 
+class GetImageUrl {
+  static const _imageUrl =
+      'https://www.themoviedb.org/t/p/w300_and_h450_bestv2';
+  static String imageUrl(String imagePath) => _imageUrl + imagePath;
 }
-
 
 @ChopperApi()
 abstract class FilmService extends ChopperService {
@@ -35,14 +35,11 @@ abstract class FilmService extends ChopperService {
   }
 }
 
-
-
 @ChopperApi()
 abstract class FilmDetailsService extends ChopperService {
   @Get(path: '/movie/{movieId}?')
   Future<Response<Result<APIFilmDetailsQuery>>> queryFilmsDetails(
-    @Path('movieId') int movieId
-    );
+      @Path('movieId') int movieId);
 
   static FilmDetailsService create() {
     final client = ChopperClient(
@@ -58,14 +55,11 @@ abstract class FilmDetailsService extends ChopperService {
   }
 }
 
-
-
 @ChopperApi()
 abstract class FilmsCastService extends ChopperService {
   @Get(path: '/movie/{movieId}/credits?')
   Future<Response<Result<APICreditsQuery>>> queryFilmsCast(
-    @Path('movieId') int movieId
-    );
+      @Path('movieId') int movieId);
 
   static FilmsCastService create() {
     final client = ChopperClient(

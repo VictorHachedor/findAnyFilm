@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:find_any_movie/data/memory_repository.dart';
 import 'package:find_any_movie/data/models/data_models.dart';
+import 'package:find_any_movie/data/repository.dart';
 import 'package:find_any_movie/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,7 +20,7 @@ class FilmDetails extends StatelessWidget {
   final FilmModel film;
   @override
   Widget build(BuildContext context) {
-    final repository = Provider.of<MemoryRepository>(context);
+    final repository = Provider.of<Repository>(context);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
@@ -50,8 +51,7 @@ class FilmDetails extends StatelessWidget {
                         child: BackButton(
                           color: Colors.white,
                           onPressed: () {
-                            // Provider.of<AppStateManager>(context, listen: false)
-                            //     .tapOnCard(false);
+                            
                           },
                         ),
                       ),
@@ -89,7 +89,7 @@ class FilmDetails extends StatelessWidget {
                               color: FilmTheme.acidGreenColor,
                             ),
                             onPressed: () {
-                              repository.insertFilm(SavedFilmModel(
+                              repository.insertSavedFilm(SavedFilmModel(
                                   id: film.id ?? 0,
                                   image: film.image ?? '',
                                   title: film.title ?? '',

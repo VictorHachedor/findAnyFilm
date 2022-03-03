@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:core';
 import 'package:flutter/foundation.dart';
 import 'repository.dart';
@@ -5,28 +6,40 @@ import 'package:find_any_movie/data/models/data_models.dart';
 
 class MemoryRepository extends Repository with ChangeNotifier {
   final List<SavedFilmModel> _currentFilms = <SavedFilmModel>[];
+  final StreamController _savedFilmStreamController =
+      StreamController<List<SavedFilmModel>>();
 
+  Stream<List<SavedFilmModel>>? _savedFilmsStream;
   @override
-  List<SavedFilmModel> findAllFilms() {
-    return _currentFilms;
+  Future<List<SavedFilmModel>> findAllSavedFilms() {
+    return Future.value(_currentFilms);
   }
 
   @override
-  SavedFilmModel findFilmById(int id) {
-    return _currentFilms.firstWhere((savedFilm) => savedFilm.id == id);
+  Future<SavedFilmModel> findSavedFilmById(int id) {
+    return Future.value(
+      _currentFilms.firstWhere((savedFilm) => savedFilm.id == id),
+    );
   }
 
   @override
-  int insertFilm(SavedFilmModel savedFilm) {
+  Stream<List<SavedFilmModel>> watchAllSavedFilms() {
+    _savedFilmsStream ??=
+        _savedFilmStreamController.stream as Stream<List<SavedFilmModel>>;
+    return _savedFilmsStream!;
+  }
+
+  @override
+  Future<int> insertSavedFilm(SavedFilmModel savedFilm) {
     _currentFilms.add(savedFilm);
     notifyListeners();
-    return 0;
+    return Future.value(0);
   }
 
   @override
-  void deleteSavedFilm(SavedFilmModel savedFilm) {
+  Future<void> deleteSavedFilm(SavedFilmModel savedFilm) {
     _currentFilms.remove(savedFilm);
-    notifyListeners();
+    return Future.value();
   }
 
   @override

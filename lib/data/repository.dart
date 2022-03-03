@@ -1,13 +1,15 @@
 import 'package:find_any_movie/data/models/data_models.dart';
 
 abstract class Repository {
-  List<SavedFilmModel> findAllFilms();
+  Future<List<SavedFilmModel>> findAllSavedFilms();
 
-  SavedFilmModel findFilmById(int id);
+  Stream<List<SavedFilmModel>> watchAllSavedFilms();
 
-  int insertFilm(SavedFilmModel savedFilm);
+  Future<SavedFilmModel> findSavedFilmById(int id);
 
-  void deleteSavedFilm(SavedFilmModel savedFilm);
+  Future<int> insertSavedFilm(SavedFilmModel savedFilm);
+
+  Future<void> deleteSavedFilm(SavedFilmModel savedFilm);
 
   Future init();
 

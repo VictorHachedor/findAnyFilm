@@ -41,4 +41,24 @@ class FilmModel extends Equatable {
         releaseDate,
         cast
       ];
+
+  factory FilmModel.fromJson(Map<String, dynamic> json) => FilmModel(
+        id: json['id'],
+        popularity: json['popularity'],
+        runtime: json['runtime'],
+        image: json['image'],
+        title: json['title'],
+        overview: json['overview'],
+        releaseDate: json['releaseDate'],
+      );
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'popularity': popularity,
+        'runtime': runtime,
+        'image': image,
+        'title': title,
+        'overview': overview,
+        'releaseDate': releaseDate,
+      };
 }

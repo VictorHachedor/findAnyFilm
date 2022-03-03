@@ -1,4 +1,6 @@
 import 'package:find_any_movie/data/memory_repository.dart';
+import 'package:find_any_movie/data/repository.dart';
+import 'package:find_any_movie/data/sqlite/sqlite_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:logging/logging.dart';
@@ -7,7 +9,9 @@ import 'screens/screens.dart';
 Future<void> main() async {
   _setupLogging();
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  final repository = SqliteRepository();
+  await repository.init();
+  runApp(MyApp(repository: repository));
 }
 
 void _setupLogging() {
@@ -18,16 +22,18 @@ void _setupLogging() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({ Key? key }) : super(key: key);
+  const MyApp({Key? key, required this.repository}) : super(key: key);
+  final Repository repository;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [    
-        ChangeNotifierProvider<MemoryRepository>(
+      providers: [
+        Provider<Repository>(
           lazy: false,
-          create: (_) => MemoryRepository(),
-          )
+          create: (_) => repository,
+          dispose: (_, Repository repository) => repository.close(),
+        )
       ],
       child: const MaterialApp(
         title: 'Find Any Movies',

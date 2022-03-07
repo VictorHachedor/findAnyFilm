@@ -15,7 +15,6 @@ import '../network/model_response.dart';
 import '../data/models/data_models.dart';
 
 class FilmList extends StatefulWidget {
-
   const FilmList({Key? key}) : super(key: key);
 
   @override
@@ -203,8 +202,6 @@ class _FilmListState extends State<FilmList> {
     final result = results[index];
     return GestureDetector(
       onTap: () {
-     //   Provider.of<AppStateManager>(context, listen: false).tapOnCard(true);
-        //TODO add navigator 2.0
         Navigator.push(topLevelContext, MaterialPageRoute(
           builder: (context) {
             return FutureBuilder<Response<Result<APIFilmDetailsQuery>>>(
@@ -225,6 +222,17 @@ class _FilmListState extends State<FilmList> {
                     }
 
                     final value = (result as Success).value;
+
+                    final List<APITrailer>? videos = value.videos.results;
+                    final youTubeTrailers = videos?.where(
+                      (trailer) =>
+                          trailer.site == 'YouTube' &&
+                          trailer.type == 'Trailer',
+                    );
+                    final trailer = youTubeTrailers!.isNotEmpty
+                        ? youTubeTrailers.first
+                        : null;
+
                     final detailFilm = FilmModel(
                       id: value.id,
                       popularity: value.voteAverage,
@@ -234,15 +242,16 @@ class _FilmListState extends State<FilmList> {
                       releaseDate: value.releaseDate,
                       runtime: value.runtime,
                       genres: value.genres,
+                      youtubeKey: trailer?.key ?? '',
                     );
+
                     return FilmDetails(film: detailFilm);
                   }
                   return const Center(
                       child: CircularProgressIndicator(color: Colors.green));
                 });
           },
-        )
-        );
+        ));
       },
       child: filmCard(result),
     );

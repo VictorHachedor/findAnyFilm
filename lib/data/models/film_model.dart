@@ -15,6 +15,7 @@ class FilmModel extends Equatable {
   final String? overview;
   final String? releaseDate;
   final List<CastModel>? cast;
+  final String? youtubeKey;
 
   const FilmModel(
       {this.id,
@@ -26,7 +27,8 @@ class FilmModel extends Equatable {
       this.title,
       this.overview,
       this.releaseDate,
-      this.cast});
+      this.cast,
+      this.youtubeKey});
 
   @override
   List<Object?> get props => [
@@ -39,7 +41,8 @@ class FilmModel extends Equatable {
         title,
         overview,
         releaseDate,
-        cast
+        cast,
+        youtubeKey
       ];
 
   factory FilmModel.fromJson(Map<String, dynamic> json) => FilmModel(

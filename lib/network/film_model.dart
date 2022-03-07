@@ -101,6 +101,7 @@ class APIFilmDetailsQuery {
   int? runtime;
   double? popularity;
   List<APIGenre>? genres;
+  APIVideosResults? videos;
 
   @JsonKey(name: 'poster_path')
   String? image;
@@ -133,4 +134,29 @@ class APIGenre {
       _$APIGenreFromJson(json);
 
   Map<String, dynamic> toJson() => _$APIGenreToJson(this);
+}
+
+@JsonSerializable()
+class APIVideosResults{
+  List<APITrailer> results;
+  APIVideosResults({required this.results});
+
+  factory APIVideosResults.fromJson(Map<String, dynamic> json) =>
+      _$APIVideosResultsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$APIVideosResultsToJson(this);
+}
+
+@JsonSerializable()
+class APITrailer {
+  String? key;
+  String? site;
+  String? type;
+
+  APITrailer({required this.key, required this.site, required this.type});
+
+  factory APITrailer.fromJson(Map<String, dynamic> json) => 
+  _$APITrailerFromJson(json);
+
+  Map<String, dynamic> toJson() => _$APITrailerToJson(this);
 }

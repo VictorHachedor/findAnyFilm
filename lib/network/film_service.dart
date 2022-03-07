@@ -37,9 +37,9 @@ abstract class FilmService extends ChopperService {
 
 @ChopperApi()
 abstract class FilmDetailsService extends ChopperService {
-  @Get(path: '/movie/{movieId}?')
+  @Get(path: '/movie/{movieId}?append_to_response=videos')
   Future<Response<Result<APIFilmDetailsQuery>>> queryFilmsDetails(
-      @Path('movieId') int movieId);
+      @Path('movieId') int movieId,);
 
   static FilmDetailsService create() {
     final client = ChopperClient(

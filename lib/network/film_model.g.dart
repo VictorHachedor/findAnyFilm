@@ -84,6 +84,9 @@ APIFilmDetailsQuery _$APIFilmDetailsQueryFromJson(Map<String, dynamic> json) =>
     )
       ..id = json['id'] as int?
       ..popularity = (json['popularity'] as num?)?.toDouble()
+      ..videos = json['videos'] == null
+          ? null
+          : APIVideosResults.fromJson(json['videos'] as Map<String, dynamic>)
       ..image = json['poster_path'] as String?
       ..title = json['title'] as String?
       ..overview = json['overview'] as String?
@@ -97,6 +100,7 @@ Map<String, dynamic> _$APIFilmDetailsQueryToJson(
       'runtime': instance.runtime,
       'popularity': instance.popularity,
       'genres': instance.genres,
+      'videos': instance.videos,
       'poster_path': instance.image,
       'title': instance.title,
       'overview': instance.overview,
@@ -110,4 +114,29 @@ APIGenre _$APIGenreFromJson(Map<String, dynamic> json) => APIGenre(
 
 Map<String, dynamic> _$APIGenreToJson(APIGenre instance) => <String, dynamic>{
       'name': instance.genreName,
+    };
+
+APIVideosResults _$APIVideosResultsFromJson(Map<String, dynamic> json) =>
+    APIVideosResults(
+      results: (json['results'] as List<dynamic>)
+          .map((e) => APITrailer.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$APIVideosResultsToJson(APIVideosResults instance) =>
+    <String, dynamic>{
+      'results': instance.results,
+    };
+
+APITrailer _$APITrailerFromJson(Map<String, dynamic> json) => APITrailer(
+      key: json['key'] as String?,
+      site: json['site'] as String?,
+      type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$APITrailerToJson(APITrailer instance) =>
+    <String, dynamic>{
+      'key': instance.key,
+      'site': instance.site,
+      'type': instance.type,
     };

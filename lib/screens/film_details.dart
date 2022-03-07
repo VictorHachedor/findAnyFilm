@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:find_any_movie/data/memory_repository.dart';
 import 'package:find_any_movie/data/models/data_models.dart';
 import 'package:find_any_movie/data/repository.dart';
+import 'package:find_any_movie/screens/screens.dart';
 import 'package:find_any_movie/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,8 +13,6 @@ import '../network/film_model.dart';
 import '../network/film_service.dart';
 import '../network/model_response.dart';
 import '../data/models/data_models.dart';
-
-
 
 class FilmDetails extends StatelessWidget {
   const FilmDetails({Key? key, required this.film}) : super(key: key);
@@ -50,9 +49,7 @@ class FilmDetails extends StatelessWidget {
                             shape: BoxShape.circle, color: Colors.grey),
                         child: BackButton(
                           color: Colors.white,
-                          onPressed: () {
-                            
-                          },
+                          onPressed: () {},
                         ),
                       ),
                     ),
@@ -79,7 +76,8 @@ class FilmDetails extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Material(
+                      SizedBox(child: Row(children: [
+                         Material(
                         type: MaterialType.circle,
                         clipBehavior: Clip.antiAlias,
                         color: FilmTheme.backgroundColor,
@@ -100,7 +98,36 @@ class FilmDetails extends StatelessWidget {
                             splashRadius: 30.0,
                             splashColor: FilmTheme.acidGreenColor),
                       ),
-                      Text('Save', style: FilmTheme.textTheme.bodyText1)
+                      Text('Save', style: FilmTheme.textTheme.bodyText1),
+                      ],)),                     
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      film.youtubeKey != '' ?
+                      SizedBox(
+                        child: Row(children: [
+                          Material(
+                        type: MaterialType.circle,
+                        clipBehavior: Clip.antiAlias,
+                        color: FilmTheme.backgroundColor,
+                        child: IconButton(
+                            icon: const Icon(
+                              Icons.play_arrow_outlined,
+                              size: 34,
+                              color: FilmTheme.acidGreenColor,
+                            ),
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return TrailerScreen(youtubeKey: film.youtubeKey);
+                              }));
+                            },
+                            splashRadius: 30.0,
+                            splashColor: FilmTheme.acidGreenColor),
+                      ),
+                      Text('Videos', style: FilmTheme.textTheme.bodyText1),
+                        ])
+                      ) :   const SizedBox.shrink(),
                     ],
                   ),
                 ),

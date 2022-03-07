@@ -1,6 +1,5 @@
 import 'dart:core';
 
-import 'package:find_any_movie/data/models/data_models.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'film_model.g.dart';
 
@@ -102,6 +101,7 @@ class APIFilmDetailsQuery {
   double? popularity;
   List<APIGenre>? genres;
   APIVideosResults? videos;
+  APICreditsResults? credits;
 
   @JsonKey(name: 'poster_path')
   String? image;
@@ -137,7 +137,7 @@ class APIGenre {
 }
 
 @JsonSerializable()
-class APIVideosResults{
+class APIVideosResults {
   List<APITrailer> results;
   APIVideosResults({required this.results});
 
@@ -155,8 +155,21 @@ class APITrailer {
 
   APITrailer({required this.key, required this.site, required this.type});
 
-  factory APITrailer.fromJson(Map<String, dynamic> json) => 
-  _$APITrailerFromJson(json);
+  factory APITrailer.fromJson(Map<String, dynamic> json) =>
+      _$APITrailerFromJson(json);
 
   Map<String, dynamic> toJson() => _$APITrailerToJson(this);
+}
+
+@JsonSerializable()
+class APICreditsResults {
+  List<APICast>? cast;
+  List<APICrew>? crew;
+
+  APICreditsResults({required this.cast, required this.crew});
+
+  factory APICreditsResults.fromJson(Map<String, dynamic> json) =>
+      _$APICreditsResultsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$APICreditsResultsToJson(this);
 }

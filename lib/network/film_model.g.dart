@@ -87,6 +87,9 @@ APIFilmDetailsQuery _$APIFilmDetailsQueryFromJson(Map<String, dynamic> json) =>
       ..videos = json['videos'] == null
           ? null
           : APIVideosResults.fromJson(json['videos'] as Map<String, dynamic>)
+      ..credits = json['credits'] == null
+          ? null
+          : APICreditsResults.fromJson(json['credits'] as Map<String, dynamic>)
       ..image = json['poster_path'] as String?
       ..title = json['title'] as String?
       ..overview = json['overview'] as String?
@@ -101,6 +104,7 @@ Map<String, dynamic> _$APIFilmDetailsQueryToJson(
       'popularity': instance.popularity,
       'genres': instance.genres,
       'videos': instance.videos,
+      'credits': instance.credits,
       'poster_path': instance.image,
       'title': instance.title,
       'overview': instance.overview,
@@ -139,4 +143,20 @@ Map<String, dynamic> _$APITrailerToJson(APITrailer instance) =>
       'key': instance.key,
       'site': instance.site,
       'type': instance.type,
+    };
+
+APICreditsResults _$APICreditsResultsFromJson(Map<String, dynamic> json) =>
+    APICreditsResults(
+      cast: (json['cast'] as List<dynamic>?)
+          ?.map((e) => APICast.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      crew: (json['crew'] as List<dynamic>?)
+          ?.map((e) => APICrew.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$APICreditsResultsToJson(APICreditsResults instance) =>
+    <String, dynamic>{
+      'cast': instance.cast,
+      'crew': instance.crew,
     };

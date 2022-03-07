@@ -37,7 +37,7 @@ class _$FilmDetailsService extends FilmDetailsService {
 
   @override
   Future<Response<Result<APIFilmDetailsQuery>>> queryFilmsDetails(int movieId) {
-    final $url = '/movie/${movieId}?append_to_response=videos';
+    final $url = '/movie/${movieId}?append_to_response=videos,credits';
     final $request = Request('GET', $url, client.baseUrl);
     return client
         .send<Result<APIFilmDetailsQuery>, APIFilmDetailsQuery>($request);

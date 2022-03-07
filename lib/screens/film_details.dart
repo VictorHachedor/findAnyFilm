@@ -59,10 +59,9 @@ class FilmDetails extends StatelessWidget {
                   height: 16,
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 16.0),
                   child: Center(
-                    child: Text(
-                      // TODO 2
+                    child: Text(                 
                       film.title ?? '',
                       style: FilmTheme.textTheme.headline1,
                     ),
@@ -76,58 +75,63 @@ class FilmDetails extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(child: Row(children: [
-                         Material(
-                        type: MaterialType.circle,
-                        clipBehavior: Clip.antiAlias,
-                        color: FilmTheme.backgroundColor,
-                        child: IconButton(
-                            icon: const Icon(
-                              Icons.bookmark_border,
-                              color: FilmTheme.acidGreenColor,
-                            ),
-                            onPressed: () {
-                              repository.insertSavedFilm(SavedFilmModel(
-                                  id: film.id ?? 0,
-                                  image: film.image ?? '',
-                                  title: film.title ?? '',
-                                  runtime: film.runtime ?? 0,
-                                  popularity: film.popularity ?? 0.0));
-                              Navigator.pop(context);
-                            },
-                            splashRadius: 30.0,
-                            splashColor: FilmTheme.acidGreenColor),
-                      ),
-                      Text('Save', style: FilmTheme.textTheme.bodyText1),
-                      ],)),                     
+                      SizedBox(
+                          child: Row(
+                        children: [
+                          Material(
+                            type: MaterialType.circle,
+                            clipBehavior: Clip.antiAlias,
+                            color: FilmTheme.backgroundColor,
+                            child: IconButton(
+                                icon: const Icon(
+                                  Icons.bookmark_border,
+                                  color: FilmTheme.acidGreenColor,
+                                ),
+                                onPressed: () {
+                                  repository.insertSavedFilm(SavedFilmModel(
+                                      id: film.id ?? 0,
+                                      image: film.image ?? '',
+                                      title: film.title ?? '',
+                                      runtime: film.runtime ?? 0,
+                                      popularity: film.popularity ?? 0.0));
+                                  Navigator.pop(context);
+                                },
+                                splashRadius: 30.0,
+                                splashColor: FilmTheme.acidGreenColor),
+                          ),
+                          Text('Save', style: FilmTheme.textTheme.bodyText1),
+                        ],
+                      )),
                       const SizedBox(
                         width: 20,
                       ),
-                      film.youtubeKey != '' ?
-                      SizedBox(
-                        child: Row(children: [
-                          Material(
-                        type: MaterialType.circle,
-                        clipBehavior: Clip.antiAlias,
-                        color: FilmTheme.backgroundColor,
-                        child: IconButton(
-                            icon: const Icon(
-                              Icons.play_arrow_outlined,
-                              size: 34,
-                              color: FilmTheme.acidGreenColor,
-                            ),
-                            onPressed: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return TrailerScreen(youtubeKey: film.youtubeKey);
-                              }));
-                            },
-                            splashRadius: 30.0,
-                            splashColor: FilmTheme.acidGreenColor),
-                      ),
-                      Text('Videos', style: FilmTheme.textTheme.bodyText1),
-                        ])
-                      ) :   const SizedBox.shrink(),
+                      film.youtubeKey != ''
+                          ? SizedBox(
+                              child: Row(children: [
+                              Material(
+                                type: MaterialType.circle,
+                                clipBehavior: Clip.antiAlias,
+                                color: FilmTheme.backgroundColor,
+                                child: IconButton(
+                                    icon: const Icon(
+                                      Icons.play_arrow_outlined,
+                                      size: 34,
+                                      color: FilmTheme.acidGreenColor,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return TrailerScreen(
+                                            youtubeKey: film.youtubeKey);
+                                      }));
+                                    },
+                                    splashRadius: 30.0,
+                                    splashColor: FilmTheme.acidGreenColor),
+                              ),
+                              Text('Videos',
+                                  style: FilmTheme.textTheme.bodyText1),
+                            ]))
+                          : const SizedBox.shrink(),
                     ],
                   ),
                 ),
@@ -176,7 +180,8 @@ class FilmDetails extends StatelessWidget {
                         const SizedBox(
                           height: 16,
                         ),
-                        crewAndCastWidget(film, 'directors', null),
+                       buildCrew(film.crew),
+                     
                         const SizedBox(
                           height: 33,
                         ),
@@ -184,7 +189,8 @@ class FilmDetails extends StatelessWidget {
                         const SizedBox(
                           height: 16,
                         ),
-                        crewAndCastWidget(film, null, 'actors'),
+                      buildCast(film.cast),
+                     
                         const SizedBox(
                           height: 64,
                         ),
@@ -232,124 +238,99 @@ class FilmDetails extends StatelessWidget {
     );
   }
 
-  Widget crewAndCastWidget(
-      FilmModel film, String? directorsMark, String? actorsMark) {
-    return FutureBuilder<Response<Result<APICreditsQuery>>>(
-        future: FilmsCastService.create().queryFilmsCast(film.id!),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString(),
-                    textAlign: TextAlign.center, textScaleFactor: 1.3),
-              );
-            }
-
-            final result = snapshot.data?.body;
-            if (result is Error) {
-              const Text('result is Error');
-            }
-            final value = (result as Success).value;
-
-            if (directorsMark != null) {
-              List<APICrew> crew = value.crew;
-              List directors = [];
-              for (var i = 0; i < crew.length; i++) {
-                if (crew[i].job == 'Director') {
-                  directors.add(crew[i].crewMemberName);
-                }
-              }
-              if (directors.isNotEmpty) {
-                return SizedBox(
-                  height: 44.0,
-                  child: GridView.builder(
-                    scrollDirection: Axis.horizontal,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      mainAxisExtent: 180,
-                      childAspectRatio: 7,
-                      mainAxisSpacing: 10.0,
-                    ),
-                    itemCount: directors.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: FilmTheme.backgroundColor,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            directors[index],
-                            overflow: TextOverflow.ellipsis,
-                            style: FilmTheme.textTheme.bodyText2,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              } else {
-                return Text(
-                  'Unknown',
+  Widget buildCrew(List<APICrew>? crew) {
+    List directors = [];
+    for (var i = 0; i < crew!.length; i++) {
+      if (crew[i].job == 'Director') {
+        directors.add(crew[i].crewMemberName);
+      }
+    }
+    if (directors.isNotEmpty) {
+      return SizedBox(
+        height: 44.0,
+        child: GridView.builder(
+          scrollDirection: Axis.horizontal,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 1,
+            mainAxisExtent: 180,
+            childAspectRatio: 7,
+            mainAxisSpacing: 10.0,
+          ),
+          itemCount: directors.length,
+          itemBuilder: (context, index) {
+            return Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: FilmTheme.backgroundColor,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  directors[index],
+                  overflow: TextOverflow.ellipsis,
                   style: FilmTheme.textTheme.bodyText2,
-                );
-              }
-            } else if (actorsMark != null) {
-              List<APICast> cast = value.cast;
-              List actorsNames = [];
-              for (final castMember in cast) {
-                actorsNames.add(castMember.actorsName);
-              }
-              if (actorsNames.isNotEmpty) {
-                return SizedBox(
-                  height: 44,
-                  child: GridView.builder(
-                    scrollDirection: Axis.horizontal,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      mainAxisExtent: 180,
-                      childAspectRatio: 7,
-                      mainAxisSpacing: 10.0,
-                    ),
-                    itemCount: actorsNames.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        padding: const EdgeInsets.all(10),
-                        height: 70,
-                        decoration: BoxDecoration(
-                          color: FilmTheme.backgroundColor,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                        ),
-                        child: Center(
-                            child: Text(
-                          actorsNames[index],
-                          overflow: TextOverflow.ellipsis,
-                          style: FilmTheme.textTheme.bodyText2,
-                        )),
-                      );
-                    },
-                  ),
-                );
-              } else {
-                Text(
-                  'Unknown',
-                  style: FilmTheme.textTheme.bodyText2,
-                );
-              }
-            }
-          }
-          return const Text('Unknown');
-        });
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      return Text(
+        'Unknown',
+        style: FilmTheme.textTheme.bodyText2,
+      );
+    }
+  }
+
+  Widget buildCast(List<APICast>? cast) {
+    List actorsNames = [];
+    for (final castMember in cast!) {
+      actorsNames.add(castMember.actorsName);
+    }
+    if (actorsNames.isNotEmpty) {
+      return SizedBox(
+        height: 44,
+        child: GridView.builder(
+          scrollDirection: Axis.horizontal,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 1,
+            mainAxisExtent: 180,
+            childAspectRatio: 7,
+            mainAxisSpacing: 10.0,
+          ),
+          itemCount: actorsNames.length,
+          itemBuilder: (context, index) {
+            return Container(
+              padding: const EdgeInsets.all(10),
+              height: 70,
+              decoration: BoxDecoration(
+                color: FilmTheme.backgroundColor,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+              ),
+              child: Center(
+                  child: Text(
+                actorsNames[index],
+                overflow: TextOverflow.ellipsis,
+                style: FilmTheme.textTheme.bodyText2,
+              )),
+            );
+          },
+        ),
+      );
+    } 
+    return Text(
+        'Unknown',
+        style: FilmTheme.textTheme.bodyText2,
+      );
+    
   }
 }

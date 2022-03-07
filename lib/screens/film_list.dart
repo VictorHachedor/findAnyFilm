@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:find_any_movie/themes.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -232,6 +233,8 @@ class _FilmListState extends State<FilmList> {
                     final trailer = youTubeTrailers!.isNotEmpty
                         ? youTubeTrailers.first
                         : null;
+                    final List<APICast>? cast = value.credits.cast;
+                    final List<APICrew>? crew = value.credits.crew;
 
                     final detailFilm = FilmModel(
                       id: value.id,
@@ -243,12 +246,14 @@ class _FilmListState extends State<FilmList> {
                       runtime: value.runtime,
                       genres: value.genres,
                       youtubeKey: trailer?.key ?? '',
+                      cast: cast ?? [],
+                      crew: crew ?? [],
                     );
 
                     return FilmDetails(film: detailFilm);
                   }
                   return const Center(
-                      child: CircularProgressIndicator(color: Colors.green));
+                      child: CircularProgressIndicator(color: FilmTheme.acidGreenColor));
                 });
           },
         ));

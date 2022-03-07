@@ -14,8 +14,9 @@ class FilmModel extends Equatable {
   final String? title;
   final String? overview;
   final String? releaseDate;
-  final List<CastModel>? cast;
   final String? youtubeKey;
+  final List<APICrew>? crew;
+  final List<APICast>? cast;
 
   const FilmModel(
       {this.id,
@@ -27,8 +28,9 @@ class FilmModel extends Equatable {
       this.title,
       this.overview,
       this.releaseDate,
-      this.cast,
-      this.youtubeKey});
+      this.youtubeKey,
+      this.crew,
+      this.cast});
 
   @override
   List<Object?> get props => [
@@ -41,8 +43,9 @@ class FilmModel extends Equatable {
         title,
         overview,
         releaseDate,
+        youtubeKey,
+        crew,
         cast,
-        youtubeKey
       ];
 
   factory FilmModel.fromJson(Map<String, dynamic> json) => FilmModel(
@@ -53,6 +56,9 @@ class FilmModel extends Equatable {
         title: json['title'],
         overview: json['overview'],
         releaseDate: json['releaseDate'],
+        youtubeKey: json['youtube_key'],
+        crew: json['crew'],
+        cast: json['cast'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -63,5 +69,8 @@ class FilmModel extends Equatable {
         'title': title,
         'overview': overview,
         'releaseDate': releaseDate,
+        'youtube_key': youtubeKey,
+        'crew': crew,
+        'cast': cast,
       };
 }

@@ -18,7 +18,7 @@ class _TrailerScreenState extends State<TrailerScreen> {
     super.initState();
     _controller = YoutubePlayerController(
       initialVideoId: widget.youtubeKey ?? '',
-      flags: YoutubePlayerFlags(
+      flags: const YoutubePlayerFlags(
         controlsVisibleAtStart: true,
       ),
     );
@@ -31,7 +31,7 @@ class _TrailerScreenState extends State<TrailerScreen> {
             progressIndicatorColor: FilmTheme.acidGreenColor,
             controller: _controller,
             showVideoProgressIndicator: true,
-            progressColors: ProgressBarColors(
+            progressColors: const ProgressBarColors(
               playedColor: FilmTheme.acidGreenColor,
               handleColor: FilmTheme.acidGreenColor,
             )),
@@ -39,10 +39,12 @@ class _TrailerScreenState extends State<TrailerScreen> {
           return Scaffold(
               backgroundColor: FilmTheme.backgroundColor,
               appBar: AppBar(
-                title: Text('Trailer'),
+                backgroundColor: FilmTheme.backgroundColor,
+                title: const Text('Trailer'),
+                centerTitle: true,
               ),
               body: Center(
-                child: player,               
+                child: player,
               ));
         });
   }

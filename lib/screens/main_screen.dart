@@ -1,4 +1,7 @@
+import 'package:find_any_movie/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'screens.dart';
@@ -30,6 +33,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: FilmTheme.backgroundColor,
         title: const Text('Find Any Film',
             style: TextStyle(
               fontSize: 23,
@@ -41,14 +45,17 @@ class _MainScreenState extends State<MainScreen> {
         children: pages,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.lightGreen,
+
+        unselectedItemColor: Colors.white,
+        backgroundColor: FilmTheme.backgroundColor,
+        selectedItemColor: FilmTheme.acidGreenColor,
         currentIndex: _selectedIndex,
         onTap: (index) {
           _onItemTapped(index);
         },
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.aod),
+            icon: Icon(Icons.travel_explore),
             label: 'News',
           ),
           BottomNavigationBarItem(
@@ -56,7 +63,7 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Films',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.circle),
+            icon: Icon(Icons.bookmark),
             label: 'Watchlist',
           ),
         ],

@@ -45,19 +45,77 @@ class _$FilmDetailsService extends FilmDetailsService {
 }
 
 // ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations, unnecessary_brace_in_string_interps
-class _$FilmsCastService extends FilmsCastService {
-  _$FilmsCastService([ChopperClient? client]) {
+class _$InCinemaService extends InCinemaService {
+  _$InCinemaService([ChopperClient? client]) {
     if (client == null) return;
     this.client = client;
   }
 
   @override
-  final definitionType = FilmsCastService;
+  final definitionType = InCinemaService;
 
   @override
-  Future<Response<Result<APICreditsQuery>>> queryFilmsCast(int movieId) {
-    final $url = '/movie/${movieId}/credits?';
+  Future<Response<Result<APINewsScreenFilmsQuery>>> queryInCinema() {
+    final $url = '/movie/now_playing?';
     final $request = Request('GET', $url, client.baseUrl);
-    return client.send<Result<APICreditsQuery>, APICreditsQuery>($request);
+    return client.send<Result<APINewsScreenFilmsQuery>,
+        APINewsScreenFilmsQuery>($request);
+  }
+}
+
+// ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations, unnecessary_brace_in_string_interps
+class _$WatchNowService extends WatchNowService {
+  _$WatchNowService([ChopperClient? client]) {
+    if (client == null) return;
+    this.client = client;
+  }
+
+  @override
+  final definitionType = WatchNowService;
+
+  @override
+  Future<Response<Result<APINewsScreenFilmsQuery>>> queryWatchNow() {
+    final $url = '/movie/popular?';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<Result<APINewsScreenFilmsQuery>,
+        APINewsScreenFilmsQuery>($request);
+  }
+}
+
+// ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations, unnecessary_brace_in_string_interps
+class _$CommingSoonService extends CommingSoonService {
+  _$CommingSoonService([ChopperClient? client]) {
+    if (client == null) return;
+    this.client = client;
+  }
+
+  @override
+  final definitionType = CommingSoonService;
+
+  @override
+  Future<Response<Result<APINewsScreenFilmsQuery>>> queryCommingSoon() {
+    final $url = '/movie/upcoming?';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<Result<APINewsScreenFilmsQuery>,
+        APINewsScreenFilmsQuery>($request);
+  }
+}
+
+// ignore_for_file: always_put_control_body_on_new_line, always_specify_types, prefer_const_declarations, unnecessary_brace_in_string_interps
+class _$TopRatedService extends TopRatedService {
+  _$TopRatedService([ChopperClient? client]) {
+    if (client == null) return;
+    this.client = client;
+  }
+
+  @override
+  final definitionType = TopRatedService;
+
+  @override
+  Future<Response<Result<APINewsScreenFilmsQuery>>> queryTopRated() {
+    final $url = '/movie/top_rated?';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<Result<APINewsScreenFilmsQuery>,
+        APINewsScreenFilmsQuery>($request);
   }
 }

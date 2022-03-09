@@ -160,3 +160,34 @@ Map<String, dynamic> _$APICreditsResultsToJson(APICreditsResults instance) =>
       'cast': instance.cast,
       'crew': instance.crew,
     };
+
+APINewsScreenFilmsQuery _$APINewsScreenFilmsQueryFromJson(
+        Map<String, dynamic> json) =>
+    APINewsScreenFilmsQuery(
+      results: (json['results'] as List<dynamic>?)
+          ?.map((e) =>
+              APINewsScreenFilmsResults.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$APINewsScreenFilmsQueryToJson(
+        APINewsScreenFilmsQuery instance) =>
+    <String, dynamic>{
+      'results': instance.results,
+    };
+
+APINewsScreenFilmsResults _$APINewsScreenFilmsResultsFromJson(
+        Map<String, dynamic> json) =>
+    APINewsScreenFilmsResults(
+      posterPath: json['poster_path'] as String?,
+      title: json['title'] as String?,
+      id: json['id'] as int?,
+    );
+
+Map<String, dynamic> _$APINewsScreenFilmsResultsToJson(
+        APINewsScreenFilmsResults instance) =>
+    <String, dynamic>{
+      'poster_path': instance.posterPath,
+      'title': instance.title,
+      'id': instance.id,
+    };

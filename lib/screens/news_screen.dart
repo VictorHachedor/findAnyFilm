@@ -1,8 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chopper/chopper.dart';
+import 'package:find_any_movie/network/film_model.dart';
 import 'package:find_any_movie/screens/film_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import '../data/models/data_models.dart';
+import '../network/film_service.dart';
+import '../network/model_response.dart';
+import '../themes.dart';
 import 'screens.dart';
-import 'package:chopper/chopper.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({Key? key}) : super(key: key);
@@ -12,24 +19,17 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
-  final cards = [
-    Container(
-      width: 200,
-      height: 200,
-      color: Colors.green,
-    ),
-    Container(
-      width: 200,
-      height: 200,
-      color: Colors.blue,
-    ),
-    Container(width: 200, height: 200, color: Colors.yellow),
-    Container(width: 200, height: 200, color: Colors.red),
-  ];
+  bool loading = false;
+  bool inErrorState = false;
+  List<APINewsScreenFilmsResults> inCinemaList = [];
+  List<APINewsScreenFilmsResults> watchNowList = [];
+  List<APINewsScreenFilmsResults> commingSoonList = [];
+  List<APINewsScreenFilmsResults> topRatedList = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: FilmTheme.backgroundColor,
       body: SafeArea(
         child: ListView(
           scrollDirection: Axis.vertical,
@@ -37,100 +37,45 @@ class _NewsScreenState extends State<NewsScreen> {
             SizedBox(
               height: 300,
               width: MediaQuery.of(context).size.width,
-              child: TestSlider(),
+              child: const TestSlider(),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('In cinemas',
-                      style: TextStyle(
-                        fontSize: 23,
-                      )),
-                  Container(
-                      height: 200,
-                      color: Colors.transparent,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return buildCard(index);
-                        },
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(width: 16);
-                        },
-                        itemCount: 4,
-                      )),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text('Watch now',
-                      style: TextStyle(
-                        fontSize: 23,
-                      )),
-                  Container(
-                      height: 200,
-                      color: Colors.transparent,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return buildCard(index);
-                        },
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(width: 16);
-                        },
-                        itemCount: 4,
-                      )),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text('Collections',
-                      style: TextStyle(
-                        fontSize: 23,
-                      )),
-                  Container(
-                      height: 200,
-                      color: Colors.transparent,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return buildCard(index);
-                        },
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(width: 16);
-                        },
-                        itemCount: 4,
-                      )),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text('Twitter',
-                      style: TextStyle(
-                        fontSize: 23,
-                      )),
-                  Container(
-                      height: 200,
-                      color: Colors.transparent,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return buildCard(index);
-                        },
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(width: 16);
-                        },
-                        itemCount: 4,
-                      )),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 400,
-                    color: Colors.blue[800],
-                    child: Text('Footer'),
-                  )
-                ],
+            SizedBox(
+              height: 1500,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                     Text('In cinemas',
+                        style: FilmTheme.textTheme.headline3),
+                    buildInCinema(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                     Text('Watch now',
+                        style: FilmTheme.textTheme.headline3),
+               buildWatchNow(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                     Text('Comming Soon',
+                        style: FilmTheme.textTheme.headline3),
+                        buildCommingSoon(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                     Text('Top Rated',
+                        style: FilmTheme.textTheme.headline3),
+                        buildTopRated(),
+                    const SizedBox(
+                      height: 64,
+                    ),
+                    Center(
+                          child: SvgPicture.asset('assets/tmdb_blue_short_nostyle.svg',
+                              color: const Color.fromRGBO(1, 180, 228, 0.9)),
+                        ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -139,12 +84,215 @@ class _NewsScreenState extends State<NewsScreen> {
     );
   }
 
-  Widget buildCard(int index) {
+  Widget buildInCinema() {
+    return FutureBuilder<Response<Result<APINewsScreenFilmsQuery>>>(
+        future: InCinemaService.create().queryInCinema(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(snapshot.error.toString(),
+                    textAlign: TextAlign.center, textScaleFactor: 1.3),
+              );
+            }
+            loading = false;
+            final result = snapshot.data?.body;
+            if (result is Error) {
+              inErrorState = true;
+              return _buildFilmList(context, inCinemaList);
+            }
+            final query = (result as Success).value;
+            inErrorState = false;
+            inCinemaList.addAll(query.results);
+            return _buildFilmList(context, inCinemaList);
+          } else {
+            if (inCinemaList.isEmpty) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return _buildFilmList(context, inCinemaList);
+            }
+          }
+        });
+  }
+
+ Widget buildWatchNow() {
+    return FutureBuilder<Response<Result<APINewsScreenFilmsQuery>>>(
+        future: WatchNowService.create().queryWatchNow(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(snapshot.error.toString(),
+                    textAlign: TextAlign.center, textScaleFactor: 1.3),
+              );
+            }
+            loading = false;
+            final result = snapshot.data?.body;
+            if (result is Error) {
+              inErrorState = true;
+              return _buildFilmList(context, watchNowList);
+            }
+            final query = (result as Success).value;
+            inErrorState = false;
+            watchNowList.addAll(query.results);
+            return _buildFilmList(context, watchNowList);
+          } else {
+            if (watchNowList.isEmpty) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return _buildFilmList(context, watchNowList);
+            }
+          }
+        });
+  }
+
+   Widget buildCommingSoon() {
+    return FutureBuilder<Response<Result<APINewsScreenFilmsQuery>>>(
+        future: CommingSoonService.create().queryCommingSoon(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(snapshot.error.toString(),
+                    textAlign: TextAlign.center, textScaleFactor: 1.3),
+              );
+            }
+            loading = false;
+            final result = snapshot.data?.body;
+            if (result is Error) {
+              inErrorState = true;
+              return _buildFilmList(context, commingSoonList);
+            }
+            final query = (result as Success).value;
+            inErrorState = false;
+            commingSoonList.addAll(query.results);
+            return _buildFilmList(context, commingSoonList);
+          } else {
+            if (commingSoonList.isEmpty) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return _buildFilmList(context, commingSoonList);
+            }
+          }
+        });
+  }
+
+Widget buildTopRated() {
+    return FutureBuilder<Response<Result<APINewsScreenFilmsQuery>>>(
+        future: TopRatedService.create().queryTopRated(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(snapshot.error.toString(),
+                    textAlign: TextAlign.center, textScaleFactor: 1.3),
+              );
+            }
+            loading = false;
+            final result = snapshot.data?.body;
+            if (result is Error) {
+              inErrorState = true;
+              return _buildFilmList(context, topRatedList);
+            }
+            final query = (result as Success).value;
+            inErrorState = false;
+            topRatedList.addAll(query.results);
+            return _buildFilmList(context, topRatedList);
+          } else {
+            if (topRatedList.isEmpty) {
+              return const Center(child: CircularProgressIndicator());
+            } else {
+              return _buildFilmList(context, topRatedList);
+            }
+          }
+        });
+  }
+
+  Widget _buildFilmList(
+    BuildContext filmListContext,
+    List<APINewsScreenFilmsResults> results,
+  ) {
+    return Flexible(
+      child: GridView.builder(
+        scrollDirection: Axis.horizontal,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          mainAxisSpacing: 2.0,
+          crossAxisCount: 1,
+          childAspectRatio: 1.8,
+        ),
+        itemCount: results.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _buildFilmCard(filmListContext, results, index);
+        },
+      ),
+    );
+  }
+
+  Widget _buildFilmCard(
+    BuildContext topLevelContext,
+    List<APINewsScreenFilmsResults> results,
+    int index,
+  ) {
+    final result = results[index];
     return GestureDetector(
       onTap: () {
+        Navigator.push(topLevelContext, MaterialPageRoute(
+          builder: (context) {
+            return FutureBuilder<Response<Result<APIFilmDetailsQuery>>>(
+                future:
+                    FilmDetailsService.create().queryFilmsDetails(result.id!),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(snapshot.error.toString(),
+                            textAlign: TextAlign.center, textScaleFactor: 1.3),
+                      );
+                    }
 
+                    final result = snapshot.data?.body;
+                    if (result is Error) {
+                      const Text('result is Error');
+                    }
+
+                    final value = (result as Success).value;
+
+                    final List<APITrailer>? videos = value.videos.results;
+                    final youTubeTrailers = videos?.where(
+                      (trailer) =>
+                          trailer.site == 'YouTube' &&
+                          trailer.type == 'Trailer',
+                    );
+                    final trailer = youTubeTrailers!.isNotEmpty
+                        ? youTubeTrailers.first
+                        : null;
+                    final List<APICast>? cast = value.credits.cast;
+                    final List<APICrew>? crew = value.credits.crew;
+
+                    final detailFilm = FilmModel(
+                      id: value.id,
+                      popularity: value.voteAverage,
+                      title: value.title,
+                      image: value.image,
+                      overview: value.overview,
+                      releaseDate: value.releaseDate,
+                      runtime: value.runtime,
+                      genres: value.genres,
+                      youtubeKey: trailer?.key ?? '',
+                      cast: cast ?? [],
+                      crew: crew ?? [],
+                    );
+
+                    return FilmDetails(film: detailFilm);
+                  }
+                  return const Center(
+                      child: CircularProgressIndicator(
+                          color: FilmTheme.acidGreenColor));
+                });
+          },
+        ));
       },
-      child: cards[index],
+      child: newsScreenFilmCard(result),
     );
   }
 }

@@ -31,7 +31,7 @@ class _FilmListState extends State<FilmList> {
   int currentStartPosition = 0;
   int currentEndPosition = 20;
   int pageCount = 20;
-  bool hasMore = false; // might be a problem
+  bool hasMore = false; // TODO might be a problem
   bool loading = false;
   bool inErrorState = false;
   int page = 1;
@@ -65,12 +65,13 @@ class _FilmListState extends State<FilmList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: FilmTheme.backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
             _buildSearchCard(),
+          
             _buildFilmLoader(
               context,
             ),
@@ -88,9 +89,11 @@ class _FilmListState extends State<FilmList> {
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Row(
-          children: [
+          children: [           
             IconButton(
-              icon: const Icon(Icons.search),
+              icon: const Icon(
+                Icons.search,
+              ),
               onPressed: () {
                 startSearch(searchTextController.text);
                 final currentFocus = FocusScope.of(context);
@@ -106,12 +109,21 @@ class _FilmListState extends State<FilmList> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                      child: TextField(
+                      child: TextField(                     
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: 'Search'),
                     autofocus: false,
                     textInputAction: TextInputAction.done,
                     controller: searchTextController,
+                    // onChanged: (value) {
+                    //   startSearch(value);                      
+                    // },
+                    onSubmitted: (value){
+                      startSearch(value);                      
+                    },
+                 //   onEditingComplete: (){startSearch(searchTextController.text);    },
+               //     onTap: (){startSearch(searchTextController.text);},
+                  
                   )),
                 ],
               ),
@@ -154,15 +166,18 @@ class _FilmListState extends State<FilmList> {
             inErrorState = true;
             return _buildFilmList(context, currentSearchList);
           }
-
           final query = (result as Success).value;
           inErrorState = false;
           trigger = true; // TODO need?
           currentSearchList.addAll(query.results);
+          print(
+              'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL ${currentSearchList.length}');
           return _buildFilmList(context, currentSearchList);
         } else {
           if (currentSearchList.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child:
+                    CircularProgressIndicator(color: FilmTheme.acidGreenColor));
           } else {
             return _buildFilmList(context, currentSearchList);
           }
@@ -189,7 +204,9 @@ class _FilmListState extends State<FilmList> {
         ),
         itemCount: results.length,
         itemBuilder: (BuildContext context, int index) {
-          return _buildFilmCard(filmListContext, results, index);
+          return results.isNotEmpty
+              ? _buildFilmCard(filmListContext, results, index)
+              : Container();
         },
       ),
     );
@@ -253,7 +270,8 @@ class _FilmListState extends State<FilmList> {
                     return FilmDetails(film: detailFilm);
                   }
                   return const Center(
-                      child: CircularProgressIndicator(color: FilmTheme.acidGreenColor));
+                      child: CircularProgressIndicator(
+                          color: FilmTheme.acidGreenColor));
                 });
           },
         ));

@@ -10,3 +10,5 @@ export 'news_screen.dart';
 export 'watchlist_screen.dart';
 
 export 'trailer_screen.dart';
+
+export 'news_screen_film_card.dart';

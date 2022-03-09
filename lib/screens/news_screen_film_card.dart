@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:find_any_movie/network/film_service.dart';
+import 'package:find_any_movie/themes.dart';
 import 'package:flutter/material.dart';
 import '../network/film_model.dart';
-import 'package:find_any_movie/themes.dart';
 
-Widget filmCard(APIResults result) {
+Widget newsScreenFilmCard(APINewsScreenFilmsResults result) {
   return Card(
     color: FilmTheme.backgroundColor,
     elevation: 0.0,
@@ -21,10 +21,12 @@ Widget filmCard(APIResults result) {
           ),
           child: CachedNetworkImage(
             imageUrl: GetImageUrl.imageUrl(result.posterPath ?? ''),
-            errorWidget: (context, url, error) =>
-                Image.asset('assets/default-image_three.png', height: 258,
-            width: 200,
-            fit: BoxFit.fill,),
+            errorWidget: (context, url, error) => Image.asset(
+              'assets/default-image.jpg',
+              height: 258,
+              width: 200,
+              fit: BoxFit.fill,
+            ),
             height: 258,
             width: 200,
             fit: BoxFit.fill,

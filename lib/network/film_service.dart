@@ -56,22 +56,78 @@ abstract class FilmDetailsService extends ChopperService {
 }
 
 @ChopperApi()
-abstract class FilmsCastService extends ChopperService {
-  @Get(path: '/movie/{movieId}/credits?')
-  Future<Response<Result<APICreditsQuery>>> queryFilmsCast(
-      @Path('movieId') int movieId);
+abstract class InCinemaService extends ChopperService {
+  @Get(path: '/movie/now_playing?')
+  Future<Response<Result<APINewsScreenFilmsQuery>>> queryInCinema();
 
-  static FilmsCastService create() {
+  static InCinemaService create() {
     final client = ChopperClient(
       baseUrl: apiUrl,
       interceptors: [_addQuery, HttpLoggingInterceptor()],
-      converter: FilmsCreditsModelConverter(),
+      converter: NewsScreenFilmsModelConverter(),
       errorConverter: const JsonConverter(),
       services: [
-        _$FilmsCastService(),
+        _$InCinemaService(),
       ],
     );
-    return _$FilmsCastService(client);
+    return _$InCinemaService(client);
+  }
+}
+
+@ChopperApi()
+abstract class WatchNowService extends ChopperService {
+  @Get(path: '/movie/popular?')
+  Future<Response<Result<APINewsScreenFilmsQuery>>> queryWatchNow();
+
+  static WatchNowService create() {
+    final client = ChopperClient(
+      baseUrl: apiUrl,
+      interceptors: [_addQuery, HttpLoggingInterceptor()],
+      converter: NewsScreenFilmsModelConverter(),
+      errorConverter: const JsonConverter(),
+      services: [
+        _$WatchNowService(),
+      ],
+    );
+    return _$WatchNowService(client);
+  }
+}
+
+@ChopperApi()
+abstract class CommingSoonService extends ChopperService {
+  @Get(path: '/movie/upcoming?')
+  Future<Response<Result<APINewsScreenFilmsQuery>>> queryCommingSoon();
+
+  static CommingSoonService create() {
+    final client = ChopperClient(
+      baseUrl: apiUrl,
+      interceptors: [_addQuery, HttpLoggingInterceptor()],
+      converter: NewsScreenFilmsModelConverter(),
+      errorConverter: const JsonConverter(),
+      services: [
+        _$CommingSoonService(),
+      ],
+    );
+    return _$CommingSoonService(client);
+  }
+}
+
+@ChopperApi()
+abstract class TopRatedService extends ChopperService {
+  @Get(path: '/movie/top_rated?')
+  Future<Response<Result<APINewsScreenFilmsQuery>>> queryTopRated();
+
+  static TopRatedService create() {
+    final client = ChopperClient(
+      baseUrl: apiUrl,
+      interceptors: [_addQuery, HttpLoggingInterceptor()],
+      converter: NewsScreenFilmsModelConverter(),
+      errorConverter: const JsonConverter(),
+      services: [
+        _$TopRatedService(),
+      ],
+    );
+    return _$TopRatedService(client);
   }
 }
 

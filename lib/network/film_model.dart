@@ -173,3 +173,31 @@ class APICreditsResults {
 
   Map<String, dynamic> toJson() => _$APICreditsResultsToJson(this);
 }
+
+@JsonSerializable()
+class APINewsScreenFilmsQuery {
+  List<APINewsScreenFilmsResults>? results;
+  APINewsScreenFilmsQuery({required this.results});
+
+  factory APINewsScreenFilmsQuery.fromJson(Map<String, dynamic> json) =>
+      _$APINewsScreenFilmsQueryFromJson(json);
+
+  Map<String, dynamic> toJson() => _$APINewsScreenFilmsQueryToJson(this);
+}
+
+@JsonSerializable()
+class APINewsScreenFilmsResults {
+  @JsonKey(name: 'poster_path')
+  String? posterPath;
+
+  String? title;
+
+  int? id;
+  APINewsScreenFilmsResults(
+      {required this.posterPath, required this.title, required this.id});
+
+  factory APINewsScreenFilmsResults.fromJson(Map<String, dynamic> json) =>
+      _$APINewsScreenFilmsResultsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$APINewsScreenFilmsResultsToJson(this);
+}

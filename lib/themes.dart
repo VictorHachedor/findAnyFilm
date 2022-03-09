@@ -12,6 +12,16 @@ class FilmTheme {
       fontWeight: FontWeight.normal,
       color: Colors.grey,
     ),
+    subtitle1: TextStyle(
+      fontSize: 15.0,
+      fontWeight: FontWeight.normal,
+      color: Colors.grey,
+    ),
+    subtitle2: TextStyle(
+      fontSize: 15.0,
+      fontWeight: FontWeight.w900,
+      color: Colors.white,
+    ),
     headline1: TextStyle(
       fontSize: 35,
       fontWeight: FontWeight.bold,
@@ -20,6 +30,11 @@ class FilmTheme {
     headline2: TextStyle(
       fontSize: 22,
       fontWeight: FontWeight.bold,
+      color: Colors.white,
+    ),
+    headline3: TextStyle(
+      fontSize: 23,
+      fontWeight: FontWeight.w900,
       color: Colors.white,
     ),
   );

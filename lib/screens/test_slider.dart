@@ -1,7 +1,7 @@
+import 'package:find_any_movie/themes.dart';
 import 'package:flutter/material.dart';
 
 class TestSlider extends StatefulWidget {
-
   const TestSlider({
     Key? key,
   }) : super(key: key);
@@ -11,13 +11,12 @@ class TestSlider extends StatefulWidget {
 }
 
 /// AnimationControllers can be created with `vsync: this` because of TickerProviderStateMixin.
-class _TestSliderState extends State<TestSlider>
-    with TickerProviderStateMixin {
+class _TestSliderState extends State<TestSlider> with TickerProviderStateMixin {
   int index = 0;
   late Animation<double> _animation;
   late AnimationController _controller;
 
-  final images = [
+  List<Image> images = [
     Image.asset('assets/slider_images/crown.jpg',
         fit: BoxFit.none, height: 450, scale: 3, key: const Key('1')),
     Image.asset('assets/slider_images/last_duel.jpg',
@@ -28,87 +27,6 @@ class _TestSliderState extends State<TestSlider>
         fit: BoxFit.none, height: 450, scale: 3, key: const Key('4')),
     Image.asset('assets/slider_images/bond.jpg',
         fit: BoxFit.none, height: 450, scale: 3, key: const Key('5')),
-  ];
-
-  final buttons = [
-    TextButton(
-        key: Key('1'),
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
-            )),
-            fixedSize: MaterialStateProperty.all<Size>(
-              const Size(150.0, 40.0),
-            ),
-            backgroundColor: MaterialStateProperty.all<Color>(
-                const Color.fromRGBO(120, 240, 120, 1.0))),
-        onPressed: () {},
-        child: const Text('In cinemas',
-            style: TextStyle(color: Colors.black, fontSize: 17.0))),
-    TextButton(
-        key: Key('2'),
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
-            )),
-            fixedSize: MaterialStateProperty.all<Size>(
-              const Size(150.0, 40.0),
-            ),
-            backgroundColor: MaterialStateProperty.all<Color>(
-                const Color.fromRGBO(120, 240, 120, 1.0))),
-        onPressed: () {},
-        child: const Text('Watch now',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 17.0,
-            ))),
-    TextButton(
-        key: Key('3'),
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
-            )),
-            fixedSize: MaterialStateProperty.all<Size>(
-              const Size(150.0, 40.0),
-            ),
-            backgroundColor: MaterialStateProperty.all<Color>(
-                const Color.fromRGBO(120, 240, 120, 1.0))),
-        onPressed: () {},
-        child: const Text('Coming soon',
-            style: TextStyle(color: Colors.black, fontSize: 17.0))),
-    TextButton(
-        key: Key('4'),
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
-            )),
-            fixedSize: MaterialStateProperty.all<Size>(
-              const Size(150.0, 40.0),
-            ),
-            backgroundColor: MaterialStateProperty.all<Color>(
-                const Color.fromRGBO(120, 240, 120, 1.0))),
-        onPressed: () {},
-        child: const Text('Buy to own',
-            style: TextStyle(color: Colors.black, fontSize: 17.0))),
-    TextButton(
-        key: Key('5'),
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0),
-            )),
-            fixedSize: MaterialStateProperty.all<Size>(
-              const Size(150.0, 40.0),
-            ),
-            backgroundColor: MaterialStateProperty.all<Color>(
-                const Color.fromRGBO(120, 240, 120, 1.0))),
-        onPressed: () {},
-        child: const Text('Watch now',
-            style: TextStyle(color: Colors.black, fontSize: 17.0))),
   ];
 
   @override
@@ -127,31 +45,6 @@ class _TestSliderState extends State<TestSlider>
     _controller.repeat();
   }
 
-  void didSelectSliderButton(TestSlider oldWidget, int buttonNumber) {
-    super.didUpdateWidget(oldWidget);
-    if (buttonNumber == 1) {
-      _controller.duration = const Duration(seconds: 40);
-      _controller.value = 0.030;
-      _controller.repeat();
-    } else if (buttonNumber == 2) {
-      _controller.duration = const Duration(seconds: 40);
-      _controller.value = 0.25;
-      _controller.repeat();
-    } else if (buttonNumber == 3) {
-      _controller.duration = const Duration(seconds: 40);
-      _controller.value = 0.44;
-      _controller.repeat();
-    } else if (buttonNumber == 4) {
-      _controller.duration = const Duration(seconds: 40);
-      _controller.value = 0.63;
-      _controller.repeat();
-    } else if (buttonNumber == 5) {
-      _controller.duration = const Duration(seconds: 40);
-      _controller.value = 0.82;
-      _controller.repeat();
-    }
-  }
-
   @override
   void dispose() {
     _controller.dispose();
@@ -162,6 +55,7 @@ class _TestSliderState extends State<TestSlider>
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: FilmTheme.backgroundColor,
       body: SizedBox(
         width: width,
         height: 600,
@@ -175,85 +69,9 @@ class _TestSliderState extends State<TestSlider>
                 child: buildImagesIndex(),
               ),
             ),
-            Column(children: [
-              const SizedBox(
-                height: 200,
-              ),
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 2000),
-                child: buildButtonsIndex(),
-              ),
-              Padding(
-                  padding: const EdgeInsets.only(left: 30, right: 30),
-                  child: SizedBox(
-                      width: width,
-                      height: 30,
-                      child: Stack(children: <Widget>[
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              buildGreyButton(1),
-                              buildGreyButton(2),
-                              buildGreyButton(3),
-                              buildGreyButton(4),
-                              buildGreyButton(5),
-                            ]),
-                        SizeTransition(
-                          sizeFactor: _animation,
-                          axis: Axis.horizontal,
-                          axisAlignment: -1,
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                buildGreenButton(1),
-                                buildGreenButton(2),
-                                buildGreenButton(3),
-                                buildGreenButton(4),
-                                buildGreenButton(5),
-                              ]),
-                        ),
-                      ])))             
-            ])
           ],
         ),
       ),
-    );
-  }
-
-  Widget buildGreenButton(
-    int buttonNumber,
-  ) {
-    return TextButton(
-      child: Text(''),
-      onPressed: () {
-        didSelectSliderButton(const TestSlider(), buttonNumber);
-        setState(() {});
-      },
-      style: ButtonStyle(
-          minimumSize: MaterialStateProperty.all<Size>(const Size(1.0, 1.0)),
-          fixedSize: MaterialStateProperty.all<Size>(
-            const Size(50.0, 5.0),
-          ),
-          backgroundColor: MaterialStateProperty.all<Color>(
-              Colors.lightGreenAccent.shade400)),
-    );
-  }
-
-  Widget buildGreyButton(
-    int buttonNumber,
-  ) {
-    return TextButton(
-      child: Text(''),
-      onPressed: () {
-        didSelectSliderButton(const TestSlider(), buttonNumber);
-        setState(() {});
-      },
-      style: ButtonStyle(
-          minimumSize: MaterialStateProperty.all<Size>(const Size(1.0, 1.0)),
-          fixedSize: MaterialStateProperty.all<Size>(
-            const Size(50.0, 5.0),
-          ),
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.grey)),
     );
   }
 
@@ -275,25 +93,5 @@ class _TestSliderState extends State<TestSlider>
       return images[0];
     }
     return images[0];
-  }
-
-  Widget buildButtonsIndex() {
-    if (_controller.value > 0.060) {
-      if (_controller.value > 0.25) {
-        if (_controller.value > 0.44) {
-          if (_controller.value > 0.63) {
-            if (_controller.value > 0.82) {
-              return buttons[4];
-            }
-            return buttons[3];
-          }
-          return buttons[2];
-        }
-        return buttons[1];
-      }
-
-      return buttons[0];
-    }
-    return buttons[0];
   }
 }

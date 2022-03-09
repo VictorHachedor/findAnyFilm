@@ -31,7 +31,7 @@ class _FilmListState extends State<FilmList> {
   int currentStartPosition = 0;
   int currentEndPosition = 20;
   int pageCount = 20;
-  bool hasMore = false; // might be a problem
+  bool hasMore = false; // TODO might be a problem
   bool loading = false;
   bool inErrorState = false;
   int page = 1;
@@ -65,7 +65,7 @@ class _FilmListState extends State<FilmList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: FilmTheme.backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -90,7 +90,7 @@ class _FilmListState extends State<FilmList> {
         child: Row(
           children: [
             IconButton(
-              icon: const Icon(Icons.search),
+              icon: const Icon(Icons.search,),
               onPressed: () {
                 startSearch(searchTextController.text);
                 final currentFocus = FocusScope.of(context);
@@ -162,7 +162,7 @@ class _FilmListState extends State<FilmList> {
           return _buildFilmList(context, currentSearchList);
         } else {
           if (currentSearchList.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(color: FilmTheme.acidGreenColor));
           } else {
             return _buildFilmList(context, currentSearchList);
           }

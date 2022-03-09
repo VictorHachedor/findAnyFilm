@@ -62,7 +62,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                             MaterialStateProperty.all<Color>(Colors.grey)),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        //TODO: Event happening while the button clicked
+                        //TODO event happening while the button clicked
                       }                      
                     },
                     child: const Text('Log in',

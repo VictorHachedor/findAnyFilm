@@ -1,5 +1,6 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:find_any_movie/data/memory_repository.dart';
 import 'package:find_any_movie/data/models/data_models.dart';
 import 'package:find_any_movie/data/repository.dart';
 import 'package:find_any_movie/screens/screens.dart';
@@ -29,39 +30,53 @@ class FilmDetails extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Stack(
-                  children: [
-                    Align(
+                Stack(children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: CachedNetworkImage(
+                      imageUrl: GetImageUrl.imageUrl(film.image ?? ''),
+                      errorWidget: (context, url, error) =>
+                          Image.asset('assets/default-image.jpg'),
                       alignment: Alignment.topLeft,
-                      child: CachedNetworkImage(
-                        imageUrl: GetImageUrl.imageUrl(film.image ?? ''),
-                        errorWidget: (context, url, error) =>
-                            Image.asset('assets/default-image.jpg'),
-                        alignment: Alignment.topLeft,
-                        fit: BoxFit.fill,
-                        width: size.width,
-                      ),
+                      fit: BoxFit.fill,
+                      width: size.width,
                     ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.grey),
-                        child: BackButton(
-                          color: Colors.white,
-                          onPressed: () {},
+                  ),
+                  Positioned(
+                    top: 0,
+                    bottom: 570,
+                    left: 0,
+                    right: 361,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(40),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                          sigmaX: 5,
+                          sigmaY: 5,
+                        ),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: BackButton(
+                              color: Colors.white,
+                              onPressed: () {},
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),                
+                ]),
                 const SizedBox(
                   height: 16,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: Center(
-                    child: Text(                 
+                    child: Text(
                       film.title ?? '',
                       style: FilmTheme.textTheme.headline1,
                     ),
@@ -180,8 +195,7 @@ class FilmDetails extends StatelessWidget {
                         const SizedBox(
                           height: 16,
                         ),
-                       buildCrew(film.crew),
-                     
+                        buildCrew(film.crew),
                         const SizedBox(
                           height: 33,
                         ),
@@ -189,13 +203,13 @@ class FilmDetails extends StatelessWidget {
                         const SizedBox(
                           height: 16,
                         ),
-                      buildCast(film.cast),
-                     
+                        buildCast(film.cast),
                         const SizedBox(
                           height: 64,
                         ),
                         Center(
-                          child: SvgPicture.asset('assets/tmdb_blue_short.svg',
+                          child: SvgPicture.asset(
+                              'assets/tmdb_blue_short_nostyle.svg',
                               color: const Color.fromRGBO(1, 180, 228, 0.9)),
                         ),
                         const SizedBox(
@@ -326,11 +340,10 @@ class FilmDetails extends StatelessWidget {
           },
         ),
       );
-    } 
+    }
     return Text(
-        'Unknown',
-        style: FilmTheme.textTheme.bodyText2,
-      );
-    
+      'Unknown',
+      style: FilmTheme.textTheme.bodyText2,
+    );
   }
 }

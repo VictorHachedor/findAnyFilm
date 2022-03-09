@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:chopper/chopper.dart';
+import 'package:find_any_movie/screens/news_screen.dart';
 import 'model_response.dart';
 import 'film_model.dart';
 
@@ -97,7 +98,7 @@ class FilmDetailsModelConverter implements Converter {
   }
 }
 
-class FilmsCreditsModelConverter implements Converter {
+class NewsScreenFilmsModelConverter implements Converter {
   @override
   Request convertRequest(Request request) {
     final req = applyHeader(
@@ -129,8 +130,9 @@ class FilmsCreditsModelConverter implements Converter {
         return response.copyWith<BodyType>(
             body: Error(Exception(mapData['status_code'])) as BodyType);
       }
-      final filmsCreditsQuery = APICreditsQuery.fromJson(mapData);
-      return response.copyWith<BodyType>(body: Success(filmsCreditsQuery) as BodyType);
+      final newsScreenFilms = APINewsScreenFilmsQuery.fromJson(mapData);
+
+      return response.copyWith<BodyType>(body: Success(newsScreenFilms) as BodyType);
     } catch (e) {
       chopperLogger.warning(e);
       return response.copyWith<BodyType>(

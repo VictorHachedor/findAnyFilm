@@ -22,7 +22,7 @@ Widget filmCard(APIResults result) {
           child: CachedNetworkImage(
             imageUrl: GetImageUrl.imageUrl(result.posterPath ?? ''),
             errorWidget: (context, url, error) =>
-                Image.asset('assets/default-image.jpg', height: 258,
+                Image.asset('assets/default-image_three.png', height: 258,
             width: 200,
             fit: BoxFit.fill,),
             height: 258,

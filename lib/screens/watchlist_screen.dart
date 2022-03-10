@@ -63,7 +63,10 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                   imageUrl: GetImageUrl.imageUrl(
                                       savedFilm.image ?? ''),
                                   errorWidget: (context, url, error) =>
-                                      Image.asset('assets/default-image.jpg'),
+                                      Image.asset('assets/default-image.jpg',
+                                      height: 120,
+                                  width: 60,
+                                  fit: BoxFit.cover),
                                   height: 120,
                                   width: 60,
                                   fit: BoxFit.cover),

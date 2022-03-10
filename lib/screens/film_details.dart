@@ -62,7 +62,9 @@ class FilmDetails extends StatelessWidget {
                             ),
                             child: BackButton(
                               color: Colors.white,
-                              onPressed: () {},
+                              onPressed: () {
+                                 Navigator.pop(context);
+                              },
                             ),
                           ),
                         ),

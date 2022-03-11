@@ -37,6 +37,11 @@ class FilmTheme {
       fontWeight: FontWeight.w900,
       color: Colors.white,
     ),
+    headline4: TextStyle(
+      fontSize: 23,
+      fontWeight: FontWeight.w900,
+      color: Colors.red,
+    ),
   );
 
   static const acidGreenColor = Color(0xff82F27E);

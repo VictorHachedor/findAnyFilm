@@ -39,7 +39,7 @@ class _TrailerScreenState extends State<TrailerScreen> {
           return Scaffold(
               backgroundColor: FilmTheme.backgroundColor,
               appBar: AppBar(
-                backgroundColor: FilmTheme.backgroundColor,
+                backgroundColor: FilmTheme.barBackgroundColor,
                 title: const Text('Trailer'),
                 centerTitle: true,
               ),

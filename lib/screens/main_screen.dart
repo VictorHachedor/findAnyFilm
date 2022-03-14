@@ -33,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: FilmTheme.backgroundColor,
+        backgroundColor: FilmTheme.barBackgroundColor,
         title: const Text('Find Any Film',
             style: TextStyle(
               fontSize: 23,
@@ -45,9 +45,8 @@ class _MainScreenState extends State<MainScreen> {
         children: pages,
       ),
       bottomNavigationBar: BottomNavigationBar(
-
         unselectedItemColor: Colors.white,
-        backgroundColor: FilmTheme.backgroundColor,
+        backgroundColor: FilmTheme.barBackgroundColor,
         selectedItemColor: FilmTheme.acidGreenColor,
         currentIndex: _selectedIndex,
         onTap: (index) {

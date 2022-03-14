@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../data/models/data_models.dart';
+import '../main.dart';
 import '../network/film_service.dart';
 import '../network/model_response.dart';
 import '../themes.dart';
@@ -31,18 +32,26 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: FilmTheme.backgroundColor,
-      body: SafeArea(
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: [
-            SizedBox(
-              height: 300,
-              width: MediaQuery.of(context).size.width,
-              child: const TestSlider(),
-            ),
-
-            Padding(
+        backgroundColor: FilmTheme.backgroundColor,
+        body: SafeArea(
+            child: RefreshIndicator(
+          color: FilmTheme.acidGreenColor,
+          backgroundColor: FilmTheme.backgroundColor,
+          onRefresh: () {
+            return Future.delayed(
+              const Duration(seconds: 1),
+              (() => setState(() {})),
+            );
+          },
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            children: [
+              SizedBox(
+                height: 300,
+                width: MediaQuery.of(context).size.width,
+                child: const TestSlider(),
+              ),
+              Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,10 +84,9 @@ class _NewsScreenState extends State<NewsScreen> {
                   ],
                 ),
               ),
-          ],
-        ),
-      ),
-    );
+            ],
+          ),
+        )));
   }
 
   Widget buildInCinema() {
@@ -107,6 +115,7 @@ class _NewsScreenState extends State<NewsScreen> {
             }
             final query = (result as Success).value;
             inErrorState = false;
+            inCinemaList.clear();
             inCinemaList.addAll(query.results);
             return _buildFilmList(context, inCinemaList);
           } else {
@@ -147,6 +156,7 @@ class _NewsScreenState extends State<NewsScreen> {
             }
             final query = (result as Success).value;
             inErrorState = false;
+            watchNowList.clear();
             watchNowList.addAll(query.results);
             return _buildFilmList(context, watchNowList);
           } else {
@@ -187,6 +197,7 @@ class _NewsScreenState extends State<NewsScreen> {
             }
             final query = (result as Success).value;
             inErrorState = false;
+            commingSoonList.clear();
             commingSoonList.addAll(query.results);
             return _buildFilmList(context, commingSoonList);
           } else {
@@ -227,6 +238,7 @@ class _NewsScreenState extends State<NewsScreen> {
             }
             final query = (result as Success).value;
             inErrorState = false;
+            topRatedList.clear();
             topRatedList.addAll(query.results);
             return _buildFilmList(context, topRatedList);
           } else {

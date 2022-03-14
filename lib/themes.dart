@@ -46,4 +46,5 @@ class FilmTheme {
 
   static const acidGreenColor = Color(0xff82F27E);
   static const backgroundColor = Color(0xff04070D);
+  static const barBackgroundColor = Color.fromARGB(255, 7, 12, 22);
 }

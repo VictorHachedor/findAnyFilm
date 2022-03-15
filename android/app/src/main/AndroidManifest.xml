@@ -2,7 +2,7 @@
     package="com.example.find_any_movie">
    <uses-permission android:name="android.permission.INTERNET"/>   
    <application
-        android:label="find_any_movie"
+        android:label="FindAnyFilm"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

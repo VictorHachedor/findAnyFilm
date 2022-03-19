@@ -1,9 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:find_any_movie/network/film_model.dart';
 
-import 'cast_model.dart';
-import 'genre_model.dart';
-
 class FilmModel extends Equatable {
   final int? id;
   final double? popularity;

@@ -35,8 +35,8 @@ CREATE TABLE $filmTable (
   Future<Database> _initDatabase() async {
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, _databaseName);
-    // TODO remember to turn off debugging before deploying app to store(s).
-    Sqflite.setDebugModeOn(true);
+    // TODO remember to turn off debugging before deploying app to store
+    Sqflite.setDebugModeOn(false);
     return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
   }
 

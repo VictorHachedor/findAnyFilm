@@ -37,8 +37,14 @@ class FilmTheme {
       fontWeight: FontWeight.w900,
       color: Colors.white,
     ),
+    headline4: TextStyle(
+      fontSize: 23,
+      fontWeight: FontWeight.w900,
+      color: Colors.red,
+    ),
   );
 
   static const acidGreenColor = Color(0xff82F27E);
   static const backgroundColor = Color(0xff04070D);
+  static const barBackgroundColor = Color.fromARGB(255, 7, 12, 22);
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chopper/chopper.dart';
 import 'package:find_any_movie/network/film_model.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../data/models/data_models.dart';
+import '../main.dart';
 import '../network/film_service.dart';
 import '../network/model_response.dart';
 import '../themes.dart';
@@ -29,59 +32,61 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: FilmTheme.backgroundColor,
-      body: SafeArea(
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: [
-            SizedBox(
-              height: 300,
-              width: MediaQuery.of(context).size.width,
-              child: const TestSlider(),
-            ),
-            SizedBox(
-              height: 1500,
-              child: Padding(
+        backgroundColor: FilmTheme.backgroundColor,
+        body: SafeArea(
+            child: RefreshIndicator(
+          color: FilmTheme.acidGreenColor,
+          backgroundColor: FilmTheme.backgroundColor,
+          onRefresh: () {
+            return Future.delayed(
+              const Duration(seconds: 1),
+              (() => setState(() {})),
+            );
+          },
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            children: [
+              SizedBox(
+                height: 300,
+                width: MediaQuery.of(context).size.width,
+                child: const TestSlider(),
+              ),
+              Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                     Text('In cinemas',
-                        style: FilmTheme.textTheme.headline3),
+                    Text('In cinemas', style: FilmTheme.textTheme.headline3),
                     buildInCinema(),
                     const SizedBox(
                       height: 20,
                     ),
-                     Text('Watch now',
-                        style: FilmTheme.textTheme.headline3),
-               buildWatchNow(),
+                    Text('Watch now', style: FilmTheme.textTheme.headline3),
+                    buildWatchNow(),
                     const SizedBox(
                       height: 20,
                     ),
-                     Text('Comming Soon',
-                        style: FilmTheme.textTheme.headline3),
-                        buildCommingSoon(),
+                    Text('Comming Soon', style: FilmTheme.textTheme.headline3),
+                    buildCommingSoon(),
                     const SizedBox(
                       height: 20,
                     ),
-                     Text('Top Rated',
-                        style: FilmTheme.textTheme.headline3),
-                        buildTopRated(),
+                    Text('Top Rated', style: FilmTheme.textTheme.headline3),
+                    buildTopRated(),
                     const SizedBox(
                       height: 64,
                     ),
                     Center(
-                          child: SvgPicture.asset('assets/tmdb_blue_short_nostyle.svg',
-                              color: const Color.fromRGBO(1, 180, 228, 0.9)),
-                        ),
+                      child: SvgPicture.asset(
+                          'assets/tmdb_blue_short_nostyle.svg',
+                          color: const Color.fromRGBO(1, 180, 228, 0.9)),
+                    ),
                   ],
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
+            ],
+          ),
+        )));
   }
 
   Widget buildInCinema() {
@@ -90,9 +95,16 @@ class _NewsScreenState extends State<NewsScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString(),
-                    textAlign: TextAlign.center, textScaleFactor: 1.3),
+              final error = snapshot.error;
+              if (error.toString().contains('SocketException:')) {
+                return Text(
+                  'Please check your internet connection.',
+                  style: FilmTheme.textTheme.headline4,
+                );
+              }
+              return Text(
+                'Please reload the application.',
+                style: FilmTheme.textTheme.headline4,
               );
             }
             loading = false;
@@ -103,11 +115,14 @@ class _NewsScreenState extends State<NewsScreen> {
             }
             final query = (result as Success).value;
             inErrorState = false;
+            inCinemaList.clear();
             inCinemaList.addAll(query.results);
             return _buildFilmList(context, inCinemaList);
           } else {
             if (inCinemaList.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: CircularProgressIndicator(
+                      color: FilmTheme.acidGreenColor));
             } else {
               return _buildFilmList(context, inCinemaList);
             }
@@ -115,15 +130,22 @@ class _NewsScreenState extends State<NewsScreen> {
         });
   }
 
- Widget buildWatchNow() {
+  Widget buildWatchNow() {
     return FutureBuilder<Response<Result<APINewsScreenFilmsQuery>>>(
         future: WatchNowService.create().queryWatchNow(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString(),
-                    textAlign: TextAlign.center, textScaleFactor: 1.3),
+              final error = snapshot.error;
+              if (error.toString().contains('SocketException:')) {
+                return Text(
+                  'Please check your internet connection.',
+                  style: FilmTheme.textTheme.headline4,
+                );
+              }
+              return Text(
+                'Please reload the application.',
+                style: FilmTheme.textTheme.headline4,
               );
             }
             loading = false;
@@ -134,11 +156,14 @@ class _NewsScreenState extends State<NewsScreen> {
             }
             final query = (result as Success).value;
             inErrorState = false;
+            watchNowList.clear();
             watchNowList.addAll(query.results);
             return _buildFilmList(context, watchNowList);
           } else {
             if (watchNowList.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: CircularProgressIndicator(
+                      color: FilmTheme.acidGreenColor));
             } else {
               return _buildFilmList(context, watchNowList);
             }
@@ -146,15 +171,22 @@ class _NewsScreenState extends State<NewsScreen> {
         });
   }
 
-   Widget buildCommingSoon() {
+  Widget buildCommingSoon() {
     return FutureBuilder<Response<Result<APINewsScreenFilmsQuery>>>(
         future: CommingSoonService.create().queryCommingSoon(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString(),
-                    textAlign: TextAlign.center, textScaleFactor: 1.3),
+              final error = snapshot.error;
+              if (error.toString().contains('SocketException:')) {
+                return Text(
+                  'Please check your internet connection.',
+                  style: FilmTheme.textTheme.headline4,
+                );
+              }
+              return Text(
+                'Please reload the application.',
+                style: FilmTheme.textTheme.headline4,
               );
             }
             loading = false;
@@ -165,11 +197,14 @@ class _NewsScreenState extends State<NewsScreen> {
             }
             final query = (result as Success).value;
             inErrorState = false;
+            commingSoonList.clear();
             commingSoonList.addAll(query.results);
             return _buildFilmList(context, commingSoonList);
           } else {
             if (commingSoonList.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: CircularProgressIndicator(
+                      color: FilmTheme.acidGreenColor));
             } else {
               return _buildFilmList(context, commingSoonList);
             }
@@ -177,15 +212,22 @@ class _NewsScreenState extends State<NewsScreen> {
         });
   }
 
-Widget buildTopRated() {
+  Widget buildTopRated() {
     return FutureBuilder<Response<Result<APINewsScreenFilmsQuery>>>(
         future: TopRatedService.create().queryTopRated(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
-              return Center(
-                child: Text(snapshot.error.toString(),
-                    textAlign: TextAlign.center, textScaleFactor: 1.3),
+              final error = snapshot.error;
+              if (error.toString().contains('SocketException:')) {
+                return Text(
+                  'Please check your internet connection.',
+                  style: FilmTheme.textTheme.headline4,
+                );
+              }
+              return Text(
+                'Please reload the application.',
+                style: FilmTheme.textTheme.headline4,
               );
             }
             loading = false;
@@ -196,11 +238,14 @@ Widget buildTopRated() {
             }
             final query = (result as Success).value;
             inErrorState = false;
+            topRatedList.clear();
             topRatedList.addAll(query.results);
             return _buildFilmList(context, topRatedList);
           } else {
             if (topRatedList.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: CircularProgressIndicator(
+                      color: FilmTheme.acidGreenColor));
             } else {
               return _buildFilmList(context, topRatedList);
             }
@@ -212,7 +257,9 @@ Widget buildTopRated() {
     BuildContext filmListContext,
     List<APINewsScreenFilmsResults> results,
   ) {
-    return Flexible(
+    return LimitedBox(
+      maxHeight: 300,
+      //  Flexible(
       child: GridView.builder(
         scrollDirection: Axis.horizontal,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -225,6 +272,7 @@ Widget buildTopRated() {
           return _buildFilmCard(filmListContext, results, index);
         },
       ),
+      //  );
     );
   }
 
@@ -239,15 +287,46 @@ Widget buildTopRated() {
         Navigator.push(topLevelContext, MaterialPageRoute(
           builder: (context) {
             return FutureBuilder<Response<Result<APIFilmDetailsQuery>>>(
-                future:
-                    FilmDetailsService.create().queryFilmsDetails(result.id!),
+                future: FilmDetailsService.create()
+                    .queryFilmsDetails(result.id ?? 0),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasError) {
-                      return Center(
-                        child: Text(snapshot.error.toString(),
-                            textAlign: TextAlign.center, textScaleFactor: 1.3),
-                      );
+                      final error = snapshot.error;
+                      if (error.toString().contains('SocketException:')) {
+                        return Scaffold(
+                            appBar: AppBar(
+                              backgroundColor: FilmTheme.backgroundColor,
+                              title: const Text('Find Any Film',
+                                  style: TextStyle(
+                                    fontSize: 23,
+                                  )),
+                              centerTitle: true,
+                            ),
+                            backgroundColor: FilmTheme.backgroundColor,
+                            body: Center(
+                              child: Text(
+                                'Please check your internet connection.',
+                                style: FilmTheme.textTheme.headline4,
+                              ),
+                            ));
+                      }
+                      return Scaffold(
+                          appBar: AppBar(
+                            backgroundColor: FilmTheme.backgroundColor,
+                            title: const Text('Find Any Film',
+                                style: TextStyle(
+                                  fontSize: 23,
+                                )),
+                            centerTitle: true,
+                          ),
+                          backgroundColor: FilmTheme.backgroundColor,
+                          body: Center(
+                            child: Text(
+                              'Please reload the application.',
+                              style: FilmTheme.textTheme.headline4,
+                            ),
+                          ));
                     }
 
                     final result = snapshot.data?.body;

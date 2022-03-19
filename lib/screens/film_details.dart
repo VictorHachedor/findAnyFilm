@@ -42,35 +42,24 @@ class FilmDetails extends StatelessWidget {
                       width: size.width,
                     ),
                   ),
-                  Positioned(
-                    top: 0,
-                    bottom: 570,
-                    left: 0,
-                    right: 361,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(40),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(
-                          sigmaX: 5,
-                          sigmaY: 5,
-                        ),
-                        child: Align(
+
+                  Align(
                           alignment: Alignment.topLeft,
                           child: Container(
-                            decoration: const BoxDecoration(
+                            decoration:  const BoxDecoration(
+                              backgroundBlendMode: BlendMode.hardLight,
+                              color: Colors.grey,
                               shape: BoxShape.circle,
                             ),
-                            child: BackButton(
+                            child: 
+                              BackButton(
                               color: Colors.white,
                               onPressed: () {
                                  Navigator.pop(context);
                               },
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ),                
+                        ),   
                 ]),
                 const SizedBox(
                   height: 16,
@@ -163,7 +152,7 @@ class FilmDetails extends StatelessWidget {
                   height: 12,
                 ),
                 Padding(
-                    padding: EdgeInsets.only(left: 25.0, right: 25.0),
+                    padding: const EdgeInsets.only(left: 25.0, right: 25.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

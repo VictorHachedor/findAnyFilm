@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:find_any_movie/themes.dart';
@@ -34,6 +35,7 @@ class _FilmListState extends State<FilmList> {
   bool hasMore = false; // TODO might be a problem
   bool loading = false;
   bool inErrorState = false;
+  bool onSocketException = false;
   int page = 1;
   bool trigger = false;
 
@@ -51,6 +53,7 @@ class _FilmListState extends State<FilmList> {
             loading = true;
             page += 1;
           });
+          filmLoader();
         }
       }
     });
@@ -71,10 +74,10 @@ class _FilmListState extends State<FilmList> {
         child: Column(
           children: <Widget>[
             _buildSearchCard(),
-          
-            _buildFilmLoader(
+            _buildFilmList(
               context,
-            ),
+              currentSearchList,
+            )
           ],
         ),
       ),
@@ -89,13 +92,14 @@ class _FilmListState extends State<FilmList> {
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Row(
-          children: [           
+          children: [
             IconButton(
               icon: const Icon(
                 Icons.search,
               ),
               onPressed: () {
                 startSearch(searchTextController.text);
+                filmLoader();
                 final currentFocus = FocusScope.of(context);
                 if (!currentFocus.hasPrimaryFocus) {
                   currentFocus.unfocus();
@@ -109,21 +113,12 @@ class _FilmListState extends State<FilmList> {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                      child: TextField(                     
+                      child: TextField(
                     decoration: const InputDecoration(
                         border: InputBorder.none, hintText: 'Search'),
                     autofocus: false,
                     textInputAction: TextInputAction.done,
                     controller: searchTextController,
-                    // onChanged: (value) {
-                    //   startSearch(value);                      
-                    // },
-                    onSubmitted: (value){
-                      startSearch(value);                      
-                    },
-                 //   onEditingComplete: (){startSearch(searchTextController.text);    },
-               //     onTap: (){startSearch(searchTextController.text);},
-                  
                   )),
                 ],
               ),
@@ -135,55 +130,40 @@ class _FilmListState extends State<FilmList> {
   }
 
   void startSearch(String value) {
-    setState(() {
-      currentSearchList.clear();
-      trigger = true;
-      value = value.trim();
-      page = 1;
-    });
+    currentSearchList.clear();
+    trigger = true;
+    value = value.trim();
+    page = 1;
   }
 
-  Widget _buildFilmLoader(BuildContext context) {
-    if (searchTextController.text.length < 3) {
-      return Container();
-    }
-    return FutureBuilder<Response<Result<APIFilmQuery>>>(
-      future: FilmService.create().queryFilms(
+  Future<List<APIResults>> filmLoader() async {
+    try {
+      final response = await FilmService.create().queryFilms(
         searchTextController.text.trim(),
         page,
-      ),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(snapshot.error.toString(),
-                  textAlign: TextAlign.center, textScaleFactor: 1.3),
-            );
-          }
-          loading = false;
-          final result = snapshot.data?.body;
-          if (result is Error) {
-            inErrorState = true;
-            return _buildFilmList(context, currentSearchList);
-          }
-          final query = (result as Success).value;
-          inErrorState = false;
-          trigger = true; // TODO need?
-          currentSearchList.addAll(query.results);
-          print(
-              'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL ${currentSearchList.length}');
-          return _buildFilmList(context, currentSearchList);
-        } else {
-          if (currentSearchList.isEmpty) {
-            return const Center(
-                child:
-                    CircularProgressIndicator(color: FilmTheme.acidGreenColor));
-          } else {
-            return _buildFilmList(context, currentSearchList);
-          }
-        }
-      },
-    );
+      );
+      loading = false;
+      final result = response.body;
+      final query = (result as Success).value;
+      inErrorState = false;
+      onSocketException = false;
+      trigger = true;
+      setState(() {
+        currentSearchList.addAll(query.results);
+      });
+      return currentSearchList;
+    } on SocketException catch (e) {
+      print(e);
+      inErrorState = true;
+      setState(() {
+        onSocketException = true;
+      });
+
+      return currentSearchList;
+    } catch (e) {
+      print('Any exception $e');
+      return currentSearchList;
+    }
   }
 
   Widget _buildFilmList(
@@ -193,7 +173,12 @@ class _FilmListState extends State<FilmList> {
     final size = MediaQuery.of(context).size;
     const itemHeight = 310;
     final itemWidth = size.width / 2;
-
+    if (onSocketException) {
+      return Text(
+        'Please check your internet connection.',
+        style: FilmTheme.textTheme.headline4,
+      );
+    }
     return Flexible(
       child: GridView.builder(
         controller: _scrollController,
@@ -204,9 +189,7 @@ class _FilmListState extends State<FilmList> {
         ),
         itemCount: results.length,
         itemBuilder: (BuildContext context, int index) {
-          return results.isNotEmpty
-              ? _buildFilmCard(filmListContext, results, index)
-              : Container();
+          return _buildFilmCard(filmListContext, results, index);
         },
       ),
     );

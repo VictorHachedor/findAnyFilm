@@ -46,7 +46,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                     child: Card(
                       elevation: 1.0,
                       shape: RoundedRectangleBorder(
-                        side: BorderSide(
+                        side: const BorderSide(
                             style: BorderStyle.solid, color: Colors.grey),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -64,9 +64,9 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                       savedFilm.image ?? ''),
                                   errorWidget: (context, url, error) =>
                                       Image.asset('assets/default-image.jpg',
-                                      height: 120,
-                                  width: 60,
-                                  fit: BoxFit.cover),
+                                          height: 120,
+                                          width: 60,
+                                          fit: BoxFit.cover),
                                   height: 120,
                                   width: 60,
                                   fit: BoxFit.cover),
@@ -76,9 +76,14 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    savedFilm.title ?? ' ',
-                                    style: FilmTheme.textTheme.subtitle2,
+                                  SizedBox(
+                                    width: 290,
+                                    child: Text(
+                                      savedFilm.title ?? ' ',
+                                      style: FilmTheme.textTheme.subtitle2,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
                                   ),
                                   const SizedBox(height: 5),
                                   Row(
@@ -87,16 +92,17 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                                         'User Score: ',
                                         style: FilmTheme.textTheme.subtitle2,
                                       ),
-                                      savedFilm.popularity! >= 5.0 ?  
-                                      const Icon(
-                                        Icons.arrow_upward,
-                                        color: Colors.green,
-                                        size: 15,
-                                      ) : const Icon(
-                                        Icons.arrow_downward,
-                                        color: Colors.purple,
-                                        size: 15,
-                                      ),
+                                      savedFilm.popularity! >= 5.0
+                                          ? const Icon(
+                                              Icons.arrow_upward,
+                                              color: Colors.green,
+                                              size: 15,
+                                            )
+                                          : const Icon(
+                                              Icons.arrow_downward,
+                                              color: Colors.purple,
+                                              size: 15,
+                                            ),
                                       Text(
                                         '${(savedFilm.popularity! * 10)}%',
                                         style: FilmTheme.textTheme.subtitle2,
